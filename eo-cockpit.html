@@ -239,7 +239,7 @@ footer a{color:var(--dim)}
 </main>
 
 <footer class="gut">
-  <p data-th="ข้อมูลวงโคจร: CelesTrak (GP/TLE) ดึงใหม่ทุก 2 ชั่วโมง · ภาพถ่าย: NASA GIBS / Worldview ซึ่งเผยแพร่ภาพหลังดาวเทียมผ่านราว 3–5 ชั่วโมง (ชุด HLS 30 ม. ช้ากว่าหลายวัน) · ทั้งสองแหล่งใช้ได้ฟรี ไม่ต้องมี API key" data-en="Orbit data: CelesTrak (GP/TLE), refreshed every 2 hours · Imagery: NASA GIBS / Worldview, published about 3–5 hours after the overpass (the 30 m HLS product lags by several days) · Both sources are free and need no API key.">ข้อมูลวงโคจร: CelesTrak (GP/TLE) ดึงใหม่ทุก 2 ชั่วโมง · ภาพถ่าย: NASA GIBS / Worldview ซึ่งเผยแพร่ภาพหลังดาวเทียมผ่านราว 3–5 ชั่วโมง (ชุด HLS 30 ม. ช้ากว่าหลายวัน) · ทั้งสองแหล่งใช้ได้ฟรี ไม่ต้องมี API key</p>
+  <p data-th="ข้อมูลวงโคจร: CelesTrak (GP/TLE) อ่านจากสำเนาที่เว็บไซต์ดึงทุก 4 ชั่วโมง · ภาพถ่าย: NASA GIBS / Worldview ซึ่งเผยแพร่ภาพหลังดาวเทียมผ่านราว 3–5 ชั่วโมง (ชุด HLS 30 ม. ช้ากว่าหลายวัน) · ทั้งสองแหล่งใช้ได้ฟรี ไม่ต้องมี API key" data-en="Orbit data: CelesTrak (GP/TLE), read from a copy this site pulls every 4 hours · Imagery: NASA GIBS / Worldview, published about 3–5 hours after the overpass (the 30 m HLS product lags by several days) · Both sources are free and need no API key.">ข้อมูลวงโคจร: CelesTrak (GP/TLE) อ่านจากสำเนาที่เว็บไซต์ดึงทุก 4 ชั่วโมง · ภาพถ่าย: NASA GIBS / Worldview ซึ่งเผยแพร่ภาพหลังดาวเทียมผ่านราว 3–5 ชั่วโมง (ชุด HLS 30 ม. ช้ากว่าหลายวัน) · ทั้งสองแหล่งใช้ได้ฟรี ไม่ต้องมี API key</p>
   <p data-th="ตำแหน่งคำนวณในเบราว์เซอร์ทุก 1 วินาทีจากองค์ประกอบวงโคจรเฉลี่ย โดยคิดผลของ J2 แบบ secular (ไม่ใช่ SGP4 เต็มรูป) คลาดเคลื่อนได้ราว 10–20 กม. เพียงพอสำหรับการแสดงผลและวางแผน แต่ไม่ควรใช้ชี้เสาอากาศ" data-en="Positions are computed in the browser every second from mean elements with secular J2 terms (not full SGP4). Expect errors of roughly 10–20 km: fine for display and planning, not for antenna pointing.">ตำแหน่งคำนวณในเบราว์เซอร์ทุก 1 วินาทีจากองค์ประกอบวงโคจรเฉลี่ย โดยคิดผลของ J2 แบบ secular (ไม่ใช่ SGP4 เต็มรูป) คลาดเคลื่อนได้ราว 10–20 กม. เพียงพอสำหรับการแสดงผลและวางแผน แต่ไม่ควรใช้ชี้เสาอากาศ</p>
   <p>© <span data-th="อวกาศบางมด · CISS · มจธ." data-en="Thonburi Space · CISS · KMUTT">อวกาศบางมด · CISS · มจธ.</span></p>
 </footer>
@@ -391,15 +391,42 @@ function fromOmm(list){
   return list.map(function(o){ return [o.NORAD_CAT_ID,o.EPOCH,o.MEAN_MOTION,o.ECCENTRICITY,o.INCLINATION,o.RA_OF_ASC_NODE,o.ARG_OF_PERICENTER,o.MEAN_ANOMALY,o.MEAN_MOTION_DOT]; });
 }
 var CK='ts-eo-tle', TTL=2*3600*1000;
+/* Mirror: a copy of the two CelesTrak groups kept in this site's own repository (gp-data branch),
+   refreshed by a scheduled GitHub Action. It is read first so that visitors never run into
+   CelesTrak's per-address download limit. CelesTrak itself is the fallback. */
+var MIRROR='https://raw.githubusercontent.com/chirasil/thonburi-space/gp-data/', MIRROR_MAX=24*3600*1000, GROUPS=['resource','weather'];
+function fromCsv(text){
+  var lines=text.trim().split(/\r?\n/), ix={}, out=[], k, f;
+  lines[0].split(',').forEach(function(n,i){ ix[n.trim()]=i; });
+  if(ix.NORAD_CAT_ID==null||ix.MEAN_MOTION==null) return out;
+  for(k=1;k<lines.length;k++){
+    f=lines[k].split(',');
+    out.push([+f[ix.NORAD_CAT_ID],f[ix.EPOCH],+f[ix.MEAN_MOTION],+f[ix.ECCENTRICITY],+f[ix.INCLINATION],+f[ix.RA_OF_ASC_NODE],+f[ix.ARG_OF_PERICENTER],+f[ix.MEAN_ANOMALY],+f[ix.MEAN_MOTION_DOT]||0]);
+  }
+  return out;
+}
+function takeRows(all,src){
+  var want={}, seen={}; CAT.forEach(function(c){ want[c.id]=1; });
+  var rows=all.filter(function(r){ if(!want[r[0]]||seen[r[0]]) return false; seen[r[0]]=1; return true; });
+  if(!rows.length) throw new Error('empty');
+  try{ localStorage.setItem(CK,JSON.stringify({at:Date.now(),rows:rows})); }catch(e){}
+  loadElements(rows,src,Date.now());
+}
+function fetchMirror(){
+  return Promise.all(GROUPS.map(function(g){ return fetch(MIRROR+g+'.csv').then(function(r){ if(!r.ok) throw new Error(r.status); return r.text(); }); }))
+    .then(function(res){ takeRows(fromCsv(res[0]).concat(fromCsv(res[1])),'mirror'); });
+}
+function fetchLive(){
+  return Promise.all(GROUPS.map(function(g){ return fetch('https://celestrak.org/NORAD/elements/gp.php?GROUP='+g+'&FORMAT=json').then(function(r){ if(!r.ok) throw new Error(r.status); return r.json(); }); }))
+    .then(function(res){ takeRows(fromOmm(res[0].concat(res[1])),'live'); });
+}
 function fetchElements(){
-  var want={}; CAT.forEach(function(c){ want[c.id]=1; });
-  var urls=['resource','weather'].map(function(g){ return 'https://celestrak.org/NORAD/elements/gp.php?GROUP='+g+'&FORMAT=json'; });
-  return Promise.all(urls.map(function(u){ return fetch(u).then(function(r){ if(!r.ok) throw new Error(r.status); return r.json(); }); }))
-    .then(function(res){
-      var seen={}, rows=fromOmm(res[0].concat(res[1])).filter(function(r){ if(!want[r[0]]||seen[r[0]]) return false; seen[r[0]]=1; return true; });
-      if(!rows.length) throw new Error('empty');
-      try{ localStorage.setItem(CK,JSON.stringify({at:Date.now(),rows:rows})); }catch(e){}
-      loadElements(rows,'live',Date.now());
+  return fetch(MIRROR+'meta.json',{cache:'no-store'}).then(function(r){ return r.ok?r.json():null; }).catch(function(){ return null; })
+    .then(function(m){
+      var have=m&&m.groups&&GROUPS.every(function(g){ return m.groups[g]; });
+      var fresh=have&&GROUPS.every(function(g){ return Date.now()-Date.parse(m.groups[g].at)<MIRROR_MAX; });
+      if(fresh) return fetchMirror().catch(fetchLive);
+      return fetchLive().catch(function(e){ if(have) return fetchMirror(); throw e; });
     });
 }
 function initElements(){
@@ -468,7 +495,7 @@ function cur(){ for(var k=0;k<sats.length;k++) if(sats[k].c.id===sel) return sat
 function renderStatus(){
   var newest=0; sats.forEach(function(s){ if(s.epoch>newest) newest=s.epoch; });
   var stale=Date.now()-newest>7*86400000;
-  var label=tleSrc==='live'?L('CelesTrak สด','CelesTrak live'):tleSrc==='cache'?L('CelesTrak (แคชในเครื่อง)','CelesTrak (local cache)'):L('ชุดสำรองในไฟล์','bundled snapshot');
+  var label=tleSrc==='live'?L('CelesTrak สด','CelesTrak live'):tleSrc==='mirror'?L('CelesTrak (สำเนาของเว็บ)','CelesTrak (site mirror)'):tleSrc==='cache'?L('CelesTrak (แคชในเครื่อง)','CelesTrak (local cache)'):L('ชุดสำรองในไฟล์','bundled snapshot');
   $('sTle').innerHTML='<i class="dot '+(stale?'stale':tleSrc==='snapshot'?'':'live')+'"></i>'+label+'<br>'+L('epoch ล่าสุดเมื่อ ','newest epoch ')+age(newest)+L('ก่อน',' ago')+(stale?L(' · เก่าเกิน 7 วัน ตำแหน่งอาจคลาดมาก',' · over 7 days old, positions may be far off'):'');
   $('sCount').textContent=sats.length;
 }
