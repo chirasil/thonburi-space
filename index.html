@@ -167,6 +167,16 @@ p{margin:0}
 .cock p{color:var(--dim);font-size:.97rem;line-height:1.65}
 .cock .go{margin-top:auto;padding-top:8px;font-family:var(--f-display);font-weight:600;color:var(--signal)}
 .cockpits .shotnote{margin-top:16px;font-size:.78rem;color:var(--dim)}
+.hm{border:1px solid var(--line);border-radius:10px;padding:14px 16px;background:rgba(7,11,22,.55);max-width:500px}
+.hm-h{font-family:var(--f-mono);font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--signal);margin-bottom:10px}
+.hm-g{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px 18px}
+.hm-g small{display:block;font-size:12px;line-height:1.4;color:var(--dim)}
+.hm-g b{display:block;font-family:var(--f-mono);font-size:13.5px;font-weight:500;line-height:1.5;color:#fff;font-variant-numeric:tabular-nums}
+.hm-bar{display:block;height:4px;border-radius:2px;background:rgba(255,255,255,.14);margin-top:5px;overflow:hidden}
+.hm-bar i{display:block;height:100%;width:0;background:var(--signal);border-radius:2px}
+.hm-a{display:inline-flex;align-items:center;gap:8px;margin-top:12px;padding-top:10px;border-top:1px solid var(--line);width:100%;font-size:13.5px;color:var(--dim);text-decoration:none}
+.hm-a:hover{color:var(--signal)}
+@media (max-width:420px){.hm-g{grid-template-columns:1fr}}
 .light{background:var(--paper);color:var(--paper-ink);padding-block:88px}
 .light .mono{color:var(--paper-dim)}
 .light .intro{color:var(--paper-dim);max-width:40em;margin-top:10px}
@@ -367,6 +377,17 @@ footer small{display:block;color:var(--dim);font-size:.76rem;margin-top:8px;line
         <h2 data-th="HAPS ต้นแบบ<br>สัญชาติไทย" data-en="A Thai-built<br>HAPS prototype">HAPS ต้นแบบ<br>สัญชาติไทย</h2>
         <p data-th="สถานีสื่อสารบนชั้นบรรยากาศสูง (High Altitude Platform Station) ลอยอยู่เหนือเส้นทางการบินพาณิชย์ ทำหน้าที่เหมือนเสาสัญญาณบนฟ้าที่ให้บริการพื้นที่กว้าง โครงการนี้ได้รับทุนจาก บพข. และพัฒนาร่วมกับบริษัท เอแอลที เทเลคอม จำกัด (มหาชน)" data-en="A High Altitude Platform Station flies above commercial air traffic and works like a cell tower in the sky, covering a wide area. The project is funded by PMUC and developed with ALT Telecom.">สถานีสื่อสารบนชั้นบรรยากาศสูง (High Altitude Platform Station) ลอยอยู่เหนือเส้นทางการบินพาณิชย์ ทำหน้าที่เหมือนเสาสัญญาณบนฟ้าที่ให้บริการพื้นที่กว้าง โครงการนี้ได้รับทุนจาก บพข. และพัฒนาร่วมกับบริษัท เอแอลที เทเลคอม จำกัด (มหาชน)</p>
         <div class="proof"><span data-th="ทุน <b>บพข. 2569</b>" data-en="Grant <b>PMUC 2026</b>">ทุน <b>บพข. 2569</b></span><span data-th="พันธมิตร <b>ALT Telecom</b>" data-en="Partner <b>ALT Telecom</b>">พันธมิตร <b>ALT Telecom</b></span></div>
+        <div class="hm" id="hapsMini" data-start="2026-06-01" data-end="2027-05-31">
+            <div class="hm-h"><span data-th="สถานะโครงการ HAPS" data-en="HAPS project status">สถานะโครงการ HAPS</span></div>
+            <div class="hm-g">
+              <div><small data-th="ระยะเวลาโครงการ" data-en="Project period">ระยะเวลาโครงการ</small><b data-th="มิ.ย. 2569 – พ.ค. 2570" data-en="Jun 2026 – May 2027">มิ.ย. 2569 – พ.ค. 2570</b></div>
+              <div><small data-th="เวลาที่ผ่านไป" data-en="Time elapsed">เวลาที่ผ่านไป</small><b id="hmMonth" data-th="–" data-en="–">–</b><i class="hm-bar"><i id="hmBar"></i></i></div>
+              <div><small data-th="ระดับความพร้อมเทคโนโลยี" data-en="Technology readiness">ระดับความพร้อมเทคโนโลยี</small><b data-th="TRL 4 → เป้าหมาย 7" data-en="TRL 4 → target 7">TRL 4 → เป้าหมาย 7</b></div>
+              <div><small data-th="ขอบเขตงาน" data-en="Scope of work">ขอบเขตงาน</small><b data-th="4 องค์ประกอบ · 7 กิจกรรม" data-en="4 components · 7 activities">4 องค์ประกอบ · 7 กิจกรรม</b></div>
+            </div>
+            <a class="hm-a" href="haps-dashboard.html"><svg viewBox="0 0 16 16" width="13" height="13" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="7" width="10" height="7" rx="1.5"/><path d="M5.2 7V5a2.8 2.8 0 015.6 0v2"/></svg><span data-th="เปิด dashboard โครงการ (ต้องใช้รหัสผ่าน) →" data-en="Open the project dashboard (passphrase required) →">เปิด dashboard โครงการ (ต้องใช้รหัสผ่าน) →</span></a>
+          </div>
+          <script>(function(){var el=document.getElementById('hapsMini');if(!el)return;var s=new Date(el.dataset.start+'T00:00:00'),e=new Date(el.dataset.end+'T23:59:59'),n=new Date();var p=Math.max(0,Math.min(1,(n-s)/(e-s)));var m=(n.getFullYear()-s.getFullYear())*12+n.getMonth()-s.getMonth()+1,th,en;if(n<s){th='ยังไม่เริ่ม';en='Not started';}else if(n>e){th='ครบ 12 เดือน';en='12 months complete';}else{m=Math.min(12,Math.max(1,m));th='เดือนที่ '+m+' จาก 12';en='Month '+m+' of 12';}var b=document.getElementById('hmMonth');b.dataset.th=th;b.dataset.en=en;b.innerHTML=document.documentElement.lang==='en'?en:th;document.getElementById('hmBar').style.width=(p*100).toFixed(0)+'%';})();</script>
         <div style="display:flex;gap:12px;flex-wrap:wrap">
           <a class="btn" href="haps.html" data-th="รู้จัก HAPS ให้มากขึ้น →" data-en="Learn more about HAPS →">รู้จัก HAPS ให้มากขึ้น →</a>
           <a class="btn ghost" href="https://chirasil.github.io/CISS/data/HAPSfornontech_en.pdf" target="_blank" rel="noopener" data-th="ฉบับเข้าใจง่าย (PDF) ↗" data-en="Plain-language PDF ↗">ฉบับเข้าใจง่าย (PDF) ↗</a>
