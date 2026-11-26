@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>EO Cockpit — อวกาศบางมด</title>
+<meta name="description" content="ติดตามตำแหน่งดาวเทียมสำรวจโลกวงโคจรต่ำ (LEO) ที่เปิดข้อมูลและภาพถ่ายให้ใช้ฟรีแบบเรียลไทม์ พร้อมภาพถ่ายล่าสุดเหนือประเทศไทย">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&family=IBM+Plex+Sans+Thai:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* A working console, not a story page: one screen of instruments on the shared night.
+   Tokens are copied from index.html so the cockpit reads as part of the same site.
+   Data: orbits from CelesTrak, imagery from NASA GIBS. Both are free and need no key. */
+:root{
+  --void:#070b16; --navy:#0b1430; --panel:#0c1326; --panel-2:#101a33;
+  --ink:#eef2fa; --dim:#a3b0c8; --faint:#6f7d99;
+  --signal:#e0b25e; --signal-ink:#1b1406;
+  --line:rgba(160,182,222,.18);
+  --ok:#6fd3a0; --warn:#f0a35e;
+  --c-landsat:#e0b25e; --c-sentinel:#6fb7ff; --c-eos:#6fd3a0; --c-jpss:#c59bff;
+  --f-display:'Chakra Petch','IBM Plex Sans Thai',system-ui,sans-serif;
+  --f-body:'IBM Plex Sans Thai',system-ui,sans-serif;
+  --f-mono:'IBM Plex Mono',ui-monospace,Menlo,monospace;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--void);color:var(--ink);font-family:var(--f-body);font-size:.95rem;line-height:1.6;-webkit-font-smoothing:antialiased}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--signal);outline-offset:2px;border-radius:4px}
+h1,h2,h3{font-family:var(--f-display);font-weight:600;margin:0;line-height:1.25}
+p{margin:0}
+.mono{font-family:var(--f-mono);font-size:.7rem;letter-spacing:.1em;text-transform:uppercase}
+.gut{padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+
+/* NAV (same shape as index.html) */
+.nav{position:sticky;top:0;z-index:50;background:rgba(7,11,22,.9);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+.nav .inner{display:flex;align-items:center;justify-content:space-between;gap:16px;padding-block:10px}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none}
+.brand svg{width:30px;height:30px;flex:none}
+.brand b{display:block;font-family:var(--f-display);font-weight:600;font-size:1rem;line-height:1.15}
+.brand small{display:block;font-family:var(--f-mono);font-size:.58rem;letter-spacing:.16em;color:var(--signal)}
+.links{display:flex;align-items:center;gap:20px}
+.links a{text-decoration:none;color:var(--dim);font-family:var(--f-display);font-weight:500;font-size:.92rem}
+.links a:hover,.links a[aria-current]{color:var(--ink)}
+.chip-btn{font-family:var(--f-mono);font-size:.72rem;letter-spacing:.08em;background:none;color:var(--ink);border:1px solid rgba(238,242,250,.3);padding:6px 11px;border-radius:6px;cursor:pointer}
+.chip-btn:hover{border-color:var(--signal);color:var(--signal)}
+
+/* STATUS STRIP */
+.strip{display:grid;grid-template-columns:repeat(5,1fr);border-bottom:1px solid var(--line);background:var(--navy)}
+.strip div{padding:10px 16px;border-right:1px solid var(--line);min-width:0}
+.strip div:last-child{border-right:0}
+.strip span{display:block;color:var(--faint)}
+.strip b{display:block;font-family:var(--f-mono);font-weight:500;font-size:1.05rem;font-variant-numeric:tabular-nums;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.strip b.small{font-size:.8rem;white-space:normal;line-height:1.35}
+.dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:6px;background:var(--faint);vertical-align:middle}
+.dot.live{background:var(--ok)} .dot.stale{background:var(--warn)}
+
+/* MAIN GRID */
+.deck{display:grid;grid-template-columns:270px minmax(0,1fr) 300px;gap:12px;padding-block:12px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:10px;min-width:0}
+.card>header{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 14px;border-bottom:1px solid var(--line)}
+.card>header h2{font-size:.95rem}
+.card>header .mono{color:var(--faint)}
+
+/* fleet */
+.fleet{list-style:none;margin:0;padding:4px;max-height:560px;overflow:auto}
+.fleet button{display:grid;grid-template-columns:10px 1fr auto;gap:2px 10px;align-items:center;width:100%;text-align:left;background:none;border:0;border-radius:7px;color:inherit;font:inherit;padding:7px 10px;cursor:pointer}
+.fleet button:hover{background:rgba(160,182,222,.07)}
+.fleet button[aria-pressed=true]{background:var(--panel-2);box-shadow:inset 2px 0 0 var(--signal)}
+.fleet i{width:9px;height:9px;border-radius:50%;grid-row:1/3}
+.fleet b{font-family:var(--f-display);font-weight:600;font-size:.9rem}
+.fleet em{font-style:normal;font-family:var(--f-mono);font-size:.68rem;color:var(--dim);font-variant-numeric:tabular-nums;white-space:nowrap}
+.fleet small{grid-column:2/4;color:var(--faint);font-size:.74rem;line-height:1.3}
+.fleet .over{color:var(--signal)}
+
+/* map */
+.mapbox{position:relative;aspect-ratio:2/1;background:#050810;border-radius:0 0 10px 10px;overflow:hidden}
+.mapbox img,.mapbox canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+.mapbox canvas{cursor:crosshair}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:6px;overflow:hidden}
+.seg button{font-family:var(--f-mono);font-size:.66rem;letter-spacing:.06em;background:none;border:0;color:var(--dim);padding:5px 9px;cursor:pointer}
+.seg button[aria-pressed=true]{background:var(--signal);color:var(--signal-ink)}
+.legend{display:flex;flex-wrap:wrap;gap:4px 16px;padding:8px 14px;color:var(--dim);font-size:.76rem;border-top:1px solid var(--line)}
+.legend i{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:6px}
+
+/* telemetry */
+.tele{padding:12px 14px}
+.tele h3{font-size:1.25rem}
+.tele .sub{color:var(--dim);font-size:.82rem;margin-top:2px}
+.kv{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--line);border:1px solid var(--line);border-radius:8px;overflow:hidden;margin-top:12px}
+.kv div{background:var(--panel);padding:8px 10px}
+.kv span{display:block;color:var(--faint);font-size:.7rem}
+.kv b{font-family:var(--f-mono);font-weight:500;font-size:.92rem;font-variant-numeric:tabular-nums}
+.spec{margin:12px 0 0;display:grid;grid-template-columns:auto 1fr;gap:4px 12px;font-size:.82rem}
+.spec dt{color:var(--faint)} .spec dd{margin:0}
+.btn{display:inline-block;margin-top:12px;font-family:var(--f-display);font-weight:600;font-size:.86rem;text-decoration:none;background:var(--signal);color:var(--signal-ink);padding:8px 14px;border-radius:7px}
+.btn.ghost{background:none;color:var(--ink);border:1px solid rgba(238,242,250,.3)}
+.btn:hover{filter:brightness(1.08)}
+
+/* lower row */
+.lower{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:12px;padding-bottom:12px}
+table{width:100%;border-collapse:collapse;font-size:.84rem}
+th,td{text-align:left;padding:7px 12px;border-bottom:1px solid var(--line);white-space:nowrap}
+th{font-family:var(--f-mono);font-weight:400;font-size:.64rem;letter-spacing:.08em;text-transform:uppercase;color:var(--faint)}
+td.num{font-family:var(--f-mono);font-variant-numeric:tabular-nums}
+tr.shot td:first-child{box-shadow:inset 2px 0 0 var(--signal)}
+.tag{display:inline-block;font-family:var(--f-mono);font-size:.62rem;letter-spacing:.06em;padding:2px 7px;border-radius:4px;border:1px solid var(--line);color:var(--dim)}
+.tag.go{border-color:var(--signal);color:var(--signal)}
+.scroll{max-height:470px;overflow:auto}
+.note{padding:10px 14px;color:var(--faint);font-size:.76rem;line-height:1.5}
+
+.imgctl{display:flex;flex-wrap:wrap;gap:8px;align-items:center;padding:10px 14px;border-bottom:1px solid var(--line)}
+.imgctl select{flex:1 1 130px;min-width:0}
+select,input[type=date]{font:inherit;font-size:.82rem;background:var(--panel-2);color:var(--ink);border:1px solid var(--line);border-radius:6px;padding:5px 8px;max-width:100%}
+.shotbox{position:relative;background:#03050b;height:420px;display:grid;place-items:center;overflow:hidden}
+.shotbox img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain}
+.shotbox p{position:relative;color:var(--faint);font-size:.82rem;padding:0 20px;text-align:center}
+.cap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:6px 14px;padding:9px 14px;font-size:.78rem;color:var(--dim)}
+.cap a{color:var(--signal)}
+
+footer{border-top:1px solid var(--line);padding-block:16px 28px;color:var(--faint);font-size:.78rem;line-height:1.6}
+footer a{color:var(--dim)}
+
+@media (max-width:1100px){
+  .deck{grid-template-columns:minmax(0,1fr) 300px}
+  .deck .mapcard{grid-column:1/3;grid-row:1}
+  .fleet{max-height:330px}
+  .lower{grid-template-columns:1fr}
+}
+@media (max-width:700px){
+  .deck{grid-template-columns:1fr}
+  .deck .mapcard{grid-column:auto}
+  .strip{grid-template-columns:1fr 1fr}
+  .strip div{border-bottom:1px solid var(--line)}
+  .strip div:last-child{grid-column:1/-1}
+  .links a.hide-s{display:none}
+  .shotbox{height:340px}
+}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="mark" viewBox="0 0 100 100">
+    <g fill="none" stroke="#e0b25e" stroke-width="2.4">
+      <ellipse cx="50" cy="50" rx="40" ry="16" transform="rotate(30 50 50)"/>
+      <ellipse cx="50" cy="50" rx="40" ry="16" transform="rotate(-30 50 50)"/>
+    </g>
+    <circle cx="50" cy="50" r="7" fill="#e0b25e"/>
+    <circle cx="84" cy="40" r="3" fill="#7ea9ff"/>
+  </symbol>
+</svg>
+
+<header class="nav gut">
+  <div class="inner">
+    <a class="brand" href="index.html"><svg aria-hidden="true"><use href="#mark"/></svg><span><b data-th="อวกาศบางมด" data-en="Thonburi Space">อวกาศบางมด</b><small>EO COCKPIT · LEO</small></span></a>
+    <nav class="links" aria-label="Main">
+      <a class="hide-s" href="index.html" data-th="หน้าหลัก" data-en="Home">หน้าหลัก</a>
+      <a class="hide-s" href="haps.html">HAPS</a>
+      <a href="eo-cockpit.html" aria-current="page">EO Cockpit</a>
+      <button class="chip-btn" id="langBtn" type="button" aria-label="Switch language">EN</button>
+    </nav>
+  </div>
+</header>
+
+<section class="strip" aria-label="Status">
+  <div><span class="mono">UTC</span><b id="sUtc">--:--:--</b></div>
+  <div><span class="mono" data-th="เวลาไทย" data-en="Bangkok">เวลาไทย</span><b id="sBkk">--:--:--</b></div>
+  <div><span class="mono" data-th="ดาวเทียมที่ติดตาม" data-en="Tracked">ดาวเทียมที่ติดตาม</span><b id="sCount">–</b></div>
+  <div><span class="mono" data-th="อยู่เหนือไทยขณะนี้" data-en="Over Thailand now">อยู่เหนือไทยขณะนี้</span><b id="sOver">–</b></div>
+  <div><span class="mono" data-th="ข้อมูลวงโคจร" data-en="Orbit data">ข้อมูลวงโคจร</span><b class="small" id="sTle">…</b></div>
+</section>
+
+<main class="gut">
+  <div class="deck">
+    <section class="card">
+      <header><h2 data-th="ฝูงดาวเทียม" data-en="Fleet">ฝูงดาวเทียม</h2><span class="mono" data-th="ข้อมูลเปิด" data-en="Open data">ข้อมูลเปิด</span></header>
+      <ul class="fleet" id="fleet"></ul>
+    </section>
+
+    <section class="card mapcard">
+      <header>
+        <h2 data-th="ตำแหน่งปัจจุบัน" data-en="Live position">ตำแหน่งปัจจุบัน</h2>
+        <div class="seg" id="baseSeg" role="group" aria-label="Basemap">
+          <button type="button" data-base="marble" aria-pressed="true">BLUE MARBLE</button>
+          <button type="button" data-base="daily" aria-pressed="false" data-th="ภาพรายวัน" data-en="DAILY IMAGE">ภาพรายวัน</button>
+        </div>
+      </header>
+      <div class="mapbox">
+        <img id="base" alt="">
+        <canvas id="map" aria-label="World map with satellite positions"></canvas>
+      </div>
+      <div class="legend">
+        <span><i style="background:var(--c-landsat)"></i>Landsat (USGS/NASA)</span>
+        <span><i style="background:var(--c-sentinel)"></i>Sentinel (Copernicus)</span>
+        <span><i style="background:var(--c-eos)"></i>Terra / Aqua (NASA)</span>
+        <span><i style="background:var(--c-jpss)"></i>JPSS (NOAA/NASA)</span>
+        <span data-th="แถบสีจาง = แนวถ่ายภาพของดาวเทียมที่เลือก · เงาเข้ม = กลางคืน" data-en="Faint band = imaging swath of the selected satellite · dark shade = night">แถบสีจาง = แนวถ่ายภาพของดาวเทียมที่เลือก · เงาเข้ม = กลางคืน</span>
+      </div>
+    </section>
+
+    <section class="card">
+      <header><h2 data-th="ดาวเทียมที่เลือก" data-en="Selected">ดาวเทียมที่เลือก</h2><span class="mono" id="tNorad"></span></header>
+      <div class="tele" id="tele"></div>
+    </section>
+  </div>
+
+  <div class="lower">
+    <section class="card">
+      <header><h2 data-th="ผ่าน มจธ. บางมด ใน 24 ชั่วโมงข้างหน้า" data-en="Passes over KMUTT Bang Mod, next 24 h">ผ่าน มจธ. บางมด ใน 24 ชั่วโมงข้างหน้า</h2><span class="mono">13.65°N 100.49°E</span></header>
+      <div class="scroll"><table><thead><tr>
+        <th data-th="ดาวเทียม" data-en="Satellite">ดาวเทียม</th>
+        <th data-th="เวลาไทย" data-en="Bangkok time">เวลาไทย</th>
+        <th data-th="อีก" data-en="In">อีก</th>
+        <th data-th="มุมเงยสูงสุด" data-en="Max elev.">มุมเงยสูงสุด</th>
+        <th data-th="ระยะแนวโคจร" data-en="Track offset">ระยะแนวโคจร</th>
+        <th data-th="โอกาสถ่ายภาพ" data-en="Imaging">โอกาสถ่ายภาพ</th>
+      </tr></thead><tbody id="passes"></tbody></table></div>
+      <p class="note" data-th="“ถ่ายได้” หมายถึง มจธ. อยู่ในแนวกวาดของเซนเซอร์ และเป็นเวลากลางวัน (เรดาร์ SAR ไม่ต้องใช้แสง) เป็นการคำนวณเชิงเรขาคณิต ไม่ได้ยืนยันว่าดาวเทียมบันทึกภาพจริงหรือท้องฟ้าปลอดเมฆ" data-en="“Yes” means KMUTT falls inside the sensor swath in daylight (SAR needs no light). This is geometry only. It does not confirm that the satellite actually acquired a scene or that the sky was clear.">“ถ่ายได้” หมายถึง มจธ. อยู่ในแนวกวาดของเซนเซอร์ และเป็นเวลากลางวัน (เรดาร์ SAR ไม่ต้องใช้แสง) เป็นการคำนวณเชิงเรขาคณิต ไม่ได้ยืนยันว่าดาวเทียมบันทึกภาพจริงหรือท้องฟ้าปลอดเมฆ</p>
+    </section>
+
+    <section class="card">
+      <header><h2 data-th="ภาพถ่ายดาวเทียมล่าสุด" data-en="Latest satellite imagery">ภาพถ่ายดาวเทียมล่าสุด</h2><span class="mono">NASA GIBS</span></header>
+      <div class="imgctl">
+        <select id="layerSel" aria-label="Imagery layer"></select>
+        <select id="regionSel" aria-label="Region"></select>
+        <button class="chip-btn" id="dPrev" type="button" aria-label="Previous day">◀</button>
+        <input type="date" id="dateIn" aria-label="Date (UTC)">
+        <button class="chip-btn" id="dNext" type="button" aria-label="Next day">▶</button>
+      </div>
+      <div class="shotbox"><p id="shotMsg"></p><img id="shot" alt=""><img id="shotRef" alt=""></div>
+      <div class="cap"><span id="shotCap"></span><a id="shotLink" target="_blank" rel="noopener" data-th="เปิดใน NASA Worldview ↗" data-en="Open in NASA Worldview ↗">เปิดใน NASA Worldview ↗</a></div>
+    </section>
+  </div>
+</main>
+
+<footer class="gut">
+  <p data-th="ข้อมูลวงโคจร: CelesTrak (GP/TLE) ดึงใหม่ทุก 2 ชั่วโมง · ภาพถ่าย: NASA GIBS / Worldview ซึ่งเผยแพร่ภาพหลังดาวเทียมผ่านราว 3–5 ชั่วโมง (ชุด HLS 30 ม. ช้ากว่าหลายวัน) · ทั้งสองแหล่งใช้ได้ฟรี ไม่ต้องมี API key" data-en="Orbit data: CelesTrak (GP/TLE), refreshed every 2 hours · Imagery: NASA GIBS / Worldview, published about 3–5 hours after the overpass (the 30 m HLS product lags by several days) · Both sources are free and need no API key.">ข้อมูลวงโคจร: CelesTrak (GP/TLE) ดึงใหม่ทุก 2 ชั่วโมง · ภาพถ่าย: NASA GIBS / Worldview ซึ่งเผยแพร่ภาพหลังดาวเทียมผ่านราว 3–5 ชั่วโมง (ชุด HLS 30 ม. ช้ากว่าหลายวัน) · ทั้งสองแหล่งใช้ได้ฟรี ไม่ต้องมี API key</p>
+  <p data-th="ตำแหน่งคำนวณในเบราว์เซอร์ทุก 1 วินาทีจากองค์ประกอบวงโคจรเฉลี่ย โดยคิดผลของ J2 แบบ secular (ไม่ใช่ SGP4 เต็มรูป) คลาดเคลื่อนได้ราว 10–20 กม. เพียงพอสำหรับการแสดงผลและวางแผน แต่ไม่ควรใช้ชี้เสาอากาศ" data-en="Positions are computed in the browser every second from mean elements with secular J2 terms (not full SGP4). Expect errors of roughly 10–20 km: fine for display and planning, not for antenna pointing.">ตำแหน่งคำนวณในเบราว์เซอร์ทุก 1 วินาทีจากองค์ประกอบวงโคจรเฉลี่ย โดยคิดผลของ J2 แบบ secular (ไม่ใช่ SGP4 เต็มรูป) คลาดเคลื่อนได้ราว 10–20 กม. เพียงพอสำหรับการแสดงผลและวางแผน แต่ไม่ควรใช้ชี้เสาอากาศ</p>
+  <p>© <span data-th="อวกาศบางมด · CISS · มจธ." data-en="Thonburi Space · CISS · KMUTT">อวกาศบางมด · CISS · มจธ.</span></p>
+</footer>
+
+<script>
+(function(){
+'use strict';
+/* ───────── language ───────── */
+var KEY='ts-lang', lang='th';
+try{ lang=localStorage.getItem(KEY)||'th'; }catch(e){}
+var langBtn=document.getElementById('langBtn');
+function L(th,en){ return lang==='th'?th:en; }
+function applyLang(l){
+  lang=l;
+  document.querySelectorAll('[data-th]').forEach(function(el){ var v=el.getAttribute('data-'+l); if(v!=null) el.innerHTML=v; });
+  document.documentElement.lang=l;
+  langBtn.textContent=l==='th'?'EN':'ไทย';
+  try{ localStorage.setItem(KEY,l); }catch(e){}
+}
+langBtn.addEventListener('click',function(){ applyLang(lang==='th'?'en':'th'); renderAll(); });
+
+/* ───────── catalogue ─────────
+   Sensor, resolution and swath are published mission specifications.
+   `layer` links a satellite to the GIBS imagery layer built from its data. */
+var PORTAL={
+  usgs:{name:'USGS EarthExplorer',url:'https://earthexplorer.usgs.gov/'},
+  cdse:{name:'Copernicus Browser',url:'https://browser.dataspace.copernicus.eu/'},
+  nasa:{name:'NASA Earthdata Search',url:'https://search.earthdata.nasa.gov/'}
+};
+var CAT=[
+ {id:39084,name:'Landsat 8',fam:'landsat',sensor:'OLI / TIRS',res:'30 m (pan 15 m)',swath:185,portal:'usgs',layer:'HLS_L30'},
+ {id:49260,name:'Landsat 9',fam:'landsat',sensor:'OLI-2 / TIRS-2',res:'30 m (pan 15 m)',swath:185,portal:'usgs',layer:'HLS_L30'},
+ {id:40697,name:'Sentinel-2A',fam:'sentinel',sensor:'MSI',res:'10 / 20 / 60 m',swath:290,portal:'cdse',layer:'HLS_S30'},
+ {id:42063,name:'Sentinel-2B',fam:'sentinel',sensor:'MSI',res:'10 / 20 / 60 m',swath:290,portal:'cdse',layer:'HLS_S30'},
+ {id:60989,name:'Sentinel-2C',fam:'sentinel',sensor:'MSI',res:'10 / 20 / 60 m',swath:290,portal:'cdse',layer:'HLS_S30'},
+ {id:39634,name:'Sentinel-1A',fam:'sentinel',sensor:'C-band SAR',res:'5 × 20 m (IW)',swath:250,portal:'cdse',sar:true},
+ {id:41335,name:'Sentinel-3A',fam:'sentinel',sensor:'OLCI / SLSTR',res:'300 m',swath:1270,portal:'cdse'},
+ {id:43437,name:'Sentinel-3B',fam:'sentinel',sensor:'OLCI / SLSTR',res:'300 m',swath:1270,portal:'cdse'},
+ {id:42969,name:'Sentinel-5P',fam:'sentinel',sensor:'TROPOMI',res:'5.5 × 3.5 km',swath:2600,portal:'cdse',gas:true},
+ {id:46984,name:'Sentinel-6 MF',fam:'sentinel',sensor:'Poseidon-4 altimeter',res:'—',swath:0,portal:'cdse',alt:true},
+ {id:25994,name:'Terra',fam:'eos',sensor:'MODIS / ASTER',res:'250 m – 1 km',swath:2330,portal:'nasa',layer:'MODIS_Terra'},
+ {id:27424,name:'Aqua',fam:'eos',sensor:'MODIS',res:'250 m – 1 km',swath:2330,portal:'nasa',layer:'MODIS_Aqua'},
+ {id:37849,name:'Suomi NPP',fam:'jpss',sensor:'VIIRS',res:'375 / 750 m',swath:3060,portal:'nasa',layer:'VIIRS_SNPP'},
+ {id:43013,name:'NOAA-20',fam:'jpss',sensor:'VIIRS',res:'375 / 750 m',swath:3060,portal:'nasa',layer:'VIIRS_NOAA20'},
+ {id:54234,name:'NOAA-21',fam:'jpss',sensor:'VIIRS',res:'375 / 750 m',swath:3060,portal:'nasa',layer:'VIIRS_NOAA21'}
+];
+var FAMCOL={landsat:'#e0b25e',sentinel:'#6fb7ff',eos:'#6fd3a0',jpss:'#c59bff'};
+var FAMNAME={landsat:'USGS / NASA',sentinel:'ESA · Copernicus',eos:'NASA EOS',jpss:'NOAA / NASA JPSS'};
+
+/* Orbital elements bundled with the page so it still works offline. Replaced by
+   live CelesTrak data when the fetch succeeds. [id, epoch, n rev/day, e, i, raan, argp, M, ndot/2] */
+var SNAPSHOT=[[39084,"2026-11-23T21:18:48.402144",14.57117649,0.00011867,98.2138,35.9733,91.6995,268.434,1.89e-06],
+[49260,"2026-11-23T15:32:39.773184",14.57118819,9.892e-05,98.2119,35.7432,95.0366,265.0945,1.96e-06],
+[40697,"2026-11-23T22:26:10.723776",14.30818258,0.00011899,98.567,40.4413,94.0946,266.0373,-1.65e-06],
+[42063,"2026-11-23T22:16:03.405216",14.30814426,0.00011304,98.5718,40.4247,91.2124,268.9188,-2.05e-06],
+[60989,"2026-11-23T11:21:27.691488",14.30816191,9.526e-05,98.5723,39.9725,108.7722,251.3564,7.2e-07],
+[39634,"2026-11-23T22:53:52.188864",14.60436319,0.00013705,98.1579,332.9605,86.8672,273.2686,5.54e-06],
+[41335,"2026-11-23T21:39:14.895936",14.26737949,0.0001095,98.6286,32.9826,83.036,277.0945,6.6e-07],
+[43437,"2026-11-23T10:54:38.758464",14.26733369,0.00010588,98.629,32.6911,127.0792,233.0486,4.1e-07],
+[42969,"2026-11-23T06:55:53.401728",14.19502322,0.00011098,98.8111,268.395,102.9641,257.1659,1.7e-07],
+[46984,"2026-11-22T19:31:56.578656",12.80931005,0.00076775,66.0386,165.5796,269.9697,90.0438,-2.6e-07],
+[25994,"2026-11-23T22:19:30.252864",14.61203891,0.00036256,97.9251,10.9727,89.1805,34.3685,2.17e-06],
+[27424,"2026-11-23T21:37:56.483616",14.62293522,0.00013934,98.4502,300.5686,104.6887,283.5992,4.51e-06],
+[37849,"2026-11-23T22:03:57.036096",14.19545271,0.0001109,98.8133,267.8105,192.1015,168.0135,3e-07],
+[43013,"2026-11-23T20:42:36.851328",14.19550959,0.00014297,98.7358,265.9967,120.6199,239.5119,2.8e-07],
+[54234,"2026-11-23T21:26:18.525408",14.19560604,0.00028056,98.7221,264.0857,93.1147,267.0351,4e-08]];
+var SNAPSHOT_DATE='2026-11-24T00:00:00Z';
+
+/* ───────── orbit maths ───────── */
+var D2R=Math.PI/180, R2D=180/Math.PI, TAU=2*Math.PI;
+var MU=398600.4418, RE=6378.137, J2=1.08262668e-3, F=1/298.257223563, E2=F*(2-F);
+var SITE={lat:13.651,lon:100.494,alt:0.01};
+var TH_BOX={s:5.5,n:20.5,w:97.3,e:105.7};
+
+function mkSat(c,o){
+  var n=o[2]*TAU/86400, e=o[3], i=o[4]*D2R, ci=Math.cos(i), k2=J2*RE*RE/2;
+  /* TLE mean motion is the Kozai value: recover the Brouwer semi-major axis as SGP4 does */
+  var a1=Math.pow(MU/(n*n),1/3), b=Math.pow(1-e*e,1.5);
+  var d1=1.5*k2*(3*ci*ci-1)/(a1*a1*b);
+  var a0=a1*(1-d1/3-d1*d1-134/81*d1*d1*d1);
+  var d0=1.5*k2*(3*ci*ci-1)/(a0*a0*b);
+  var n0=n/(1+d0), a=a0/(1-d0), p=a*(1-e*e), q=J2*(RE/p)*(RE/p)*n0;
+  return {c:c,epoch:Date.parse(o[1]+'Z'),n:n,e:e,i:i,a:a,
+    O0:o[5]*D2R,w0:o[6]*D2R,M0:o[7]*D2R,nd:o[8]||0,
+    Od:-1.5*q*ci, wd:0.75*q*(5*ci*ci-1), period:TAU/n/60};
+}
+function gmst(ms){ var d=ms/86400000+2440587.5-2451545.0; return ((280.46061837+360.98564736629*d)%360+360)%360*D2R; }
+function geodetic(x,y,z){
+  var lon=Math.atan2(y,x), r=Math.hypot(x,y), lat=Math.atan2(z,r*(1-E2)), N=RE, k;
+  for(k=0;k<5;k++){ var s=Math.sin(lat); N=RE/Math.sqrt(1-E2*s*s); lat=Math.atan2(z+E2*N*s,r); }
+  return {lat:lat*R2D,lon:lon*R2D,alt:r/Math.cos(lat)-N};
+}
+function prop(s,ms){
+  var dt=(ms-s.epoch)/1000, dd=dt/86400;
+  var M=s.M0+s.n*dt+TAU*s.nd*dd*dd, w=s.w0+s.wd*dt, O=s.O0+s.Od*dt, e=s.e, E=M, k;
+  for(k=0;k<8;k++) E-= (E-e*Math.sin(E)-M)/(1-e*Math.cos(E));
+  var nu=2*Math.atan2(Math.sqrt(1+e)*Math.sin(E/2),Math.sqrt(1-e)*Math.cos(E/2));
+  var r=s.a*(1-e*Math.cos(E)), u=w+nu, cu=Math.cos(u), su=Math.sin(u), cO=Math.cos(O), sO=Math.sin(O), ci=Math.cos(s.i);
+  var x=r*(cO*cu-sO*su*ci), y=r*(sO*cu+cO*su*ci), z=r*su*Math.sin(s.i);
+  var g=gmst(ms), cg=Math.cos(g), sg=Math.sin(g), xe=x*cg+y*sg, ye=-x*sg+y*cg;
+  var gd=geodetic(xe,ye,z);
+  gd.x=xe; gd.y=ye; gd.z=z; gd.v=Math.sqrt(MU*(2/r-1/s.a));
+  return gd;
+}
+var siteEcef=(function(){
+  var la=SITE.lat*D2R, lo=SITE.lon*D2R, s=Math.sin(la), N=RE/Math.sqrt(1-E2*s*s);
+  return {x:(N+SITE.alt)*Math.cos(la)*Math.cos(lo),y:(N+SITE.alt)*Math.cos(la)*Math.sin(lo),z:(N*(1-E2)+SITE.alt)*s,la:la,lo:lo};
+})();
+function look(p){
+  var dx=p.x-siteEcef.x, dy=p.y-siteEcef.y, dz=p.z-siteEcef.z, la=siteEcef.la, lo=siteEcef.lo;
+  var e=-Math.sin(lo)*dx+Math.cos(lo)*dy;
+  var n=-Math.sin(la)*Math.cos(lo)*dx-Math.sin(la)*Math.sin(lo)*dy+Math.cos(la)*dz;
+  var u=Math.cos(la)*Math.cos(lo)*dx+Math.cos(la)*Math.sin(lo)*dy+Math.sin(la)*dz;
+  return {el:Math.asin(u/Math.hypot(dx,dy,dz))*R2D, az:(Math.atan2(e,n)*R2D+360)%360};
+}
+function gcKm(la1,lo1,la2,lo2){
+  var a=Math.sin((la2-la1)*D2R/2), b=Math.sin((lo2-lo1)*D2R/2);
+  return 2*6371*Math.asin(Math.sqrt(a*a+Math.cos(la1*D2R)*Math.cos(la2*D2R)*b*b));
+}
+function dest(la,lo,brg,km){
+  var d=km/6371, a=la*D2R, la2=Math.asin(Math.sin(a)*Math.cos(d)+Math.cos(a)*Math.sin(d)*Math.cos(brg));
+  var lo2=lo*D2R+Math.atan2(Math.sin(brg)*Math.sin(d)*Math.cos(a),Math.cos(d)-Math.sin(a)*Math.sin(la2));
+  return [la2*R2D,((lo2*R2D+540)%360)-180];
+}
+function bearing(la1,lo1,la2,lo2){
+  var a=la1*D2R,b=la2*D2R,dl=(lo2-lo1)*D2R;
+  return Math.atan2(Math.sin(dl)*Math.cos(b),Math.cos(a)*Math.sin(b)-Math.sin(a)*Math.cos(b)*Math.cos(dl));
+}
+/* low-precision solar position: sub-solar point, good to a fraction of a degree */
+function sun(ms){
+  var d=ms/86400000+2440587.5-2451545.0, g=(357.528+0.9856003*d)*D2R, l=(280.460+0.9856474*d+1.915*Math.sin(g)+0.020*Math.sin(2*g))*D2R;
+  var ep=(23.439-4e-7*d)*D2R, ra=Math.atan2(Math.cos(ep)*Math.sin(l),Math.cos(l)), dec=Math.asin(Math.sin(ep)*Math.sin(l));
+  return {lat:dec*R2D, lon:(((ra-gmst(ms))*R2D+540)%360+360)%360-180};
+}
+function sunEl(ms,la,lo){
+  var s=sun(ms); return Math.asin(Math.sin(la*D2R)*Math.sin(s.lat*D2R)+Math.cos(la*D2R)*Math.cos(s.lat*D2R)*Math.cos((lo-s.lon)*D2R))*R2D;
+}
+
+/* ───────── state ───────── */
+var sats=[], sel=null, tleSrc='snapshot', tleAt=0, passes=[], now={};
+function loadElements(rows,src,at){
+  var by={}; rows.forEach(function(r){ by[r[0]]=r; });
+  sats=CAT.filter(function(c){ return by[c.id]; }).map(function(c){ return mkSat(c,by[c.id]); });
+  tleSrc=src; tleAt=at;
+  if(!sel||!sats.some(function(s){return s.c.id===sel;})) sel=sats.length?sats[0].c.id:null;
+  computePasses(); renderAll();
+}
+function fromOmm(list){
+  return list.map(function(o){ return [o.NORAD_CAT_ID,o.EPOCH,o.MEAN_MOTION,o.ECCENTRICITY,o.INCLINATION,o.RA_OF_ASC_NODE,o.ARG_OF_PERICENTER,o.MEAN_ANOMALY,o.MEAN_MOTION_DOT]; });
+}
+var CK='ts-eo-tle', TTL=2*3600*1000;
+function fetchElements(){
+  var want={}; CAT.forEach(function(c){ want[c.id]=1; });
+  var urls=['resource','weather'].map(function(g){ return 'https://celestrak.org/NORAD/elements/gp.php?GROUP='+g+'&FORMAT=json'; });
+  return Promise.all(urls.map(function(u){ return fetch(u).then(function(r){ if(!r.ok) throw new Error(r.status); return r.json(); }); }))
+    .then(function(res){
+      var seen={}, rows=fromOmm(res[0].concat(res[1])).filter(function(r){ if(!want[r[0]]||seen[r[0]]) return false; seen[r[0]]=1; return true; });
+      if(!rows.length) throw new Error('empty');
+      try{ localStorage.setItem(CK,JSON.stringify({at:Date.now(),rows:rows})); }catch(e){}
+      loadElements(rows,'live',Date.now());
+    });
+}
+function initElements(){
+  var cache=null; try{ cache=JSON.parse(localStorage.getItem(CK)||'null'); }catch(e){}
+  if(cache&&cache.rows&&cache.rows.length) loadElements(cache.rows,'cache',cache.at);
+  else loadElements(SNAPSHOT,'snapshot',Date.parse(SNAPSHOT_DATE));
+  if(!cache||Date.now()-cache.at>TTL) fetchElements().catch(function(){ renderStatus(); });
+  setInterval(function(){ fetchElements().catch(function(){}); },TTL);
+}
+
+/* ───────── passes over the site ───────── */
+function computePasses(){
+  var t0=Date.now(), step=20000, out=[];
+  sats.forEach(function(s){
+    var cur=null, t, p, lk;
+    for(t=t0;t<t0+86400000;t+=step){
+      p=prop(s,t); lk=look(p);
+      if(lk.el>0){
+        var d=gcKm(p.lat,p.lon,SITE.lat,SITE.lon);
+        if(!cur) cur={s:s,aos:t,max:-1,tmax:t,dmin:1e9};
+        if(lk.el>cur.max){ cur.max=lk.el; cur.tmax=t; }
+        if(d<cur.dmin) cur.dmin=d;
+      } else if(cur){ cur.los=t; if(cur.max>=10) out.push(cur); cur=null; }
+    }
+  });
+  out.forEach(function(p){
+    p.day=sunEl(p.tmax,SITE.lat,SITE.lon)>5;
+    p.inSwath=p.s.c.swath>0&&p.dmin<=p.s.c.swath/2;
+    p.shot=p.inSwath&&(p.day||p.s.c.sar);
+  });
+  out.sort(function(a,b){ return a.tmax-b.tmax; });
+  passes=out;
+}
+
+/* ───────── rendering ───────── */
+var $=function(id){ return document.getElementById(id); };
+function fmtLat(v){ return Math.abs(v).toFixed(2)+'°'+(v>=0?'N':'S'); }
+function fmtLon(v){ return Math.abs(v).toFixed(2)+'°'+(v>=0?'E':'W'); }
+function hms(ms,tz){ return new Date(ms).toLocaleTimeString('en-GB',{timeZone:tz,hour12:false}); }
+function age(ms){
+  var h=(Date.now()-ms)/3600000;
+  if(h<1) return L(Math.max(1,Math.round(h*60))+' นาที',Math.max(1,Math.round(h*60))+' min');
+  if(h<48) return L(h.toFixed(0)+' ชม.',h.toFixed(0)+' h');
+  return L((h/24).toFixed(0)+' วัน',(h/24).toFixed(0)+' d');
+}
+function inTh(p){ return p.lat>=TH_BOX.s&&p.lat<=TH_BOX.n&&p.lon>=TH_BOX.w&&p.lon<=TH_BOX.e; }
+
+function renderFleet(){
+  var ul=$('fleet'); ul.innerHTML='';
+  sats.forEach(function(s){
+    var li=document.createElement('li'), b=document.createElement('button');
+    b.type='button'; b.dataset.id=s.c.id; b.setAttribute('aria-pressed',s.c.id===sel);
+    b.innerHTML='<i style="background:'+FAMCOL[s.c.fam]+'"></i><b>'+s.c.name+'</b><em></em><small>'+s.c.sensor+' · '+s.c.res+'</small>';
+    b.addEventListener('click',function(){ select(s.c.id); });
+    li.appendChild(b); ul.appendChild(li);
+  });
+}
+function select(id){
+  sel=id;
+  document.querySelectorAll('#fleet button').forEach(function(b){ b.setAttribute('aria-pressed',+b.dataset.id===id); });
+  var s=cur(); if(s&&s.c.layer){ $('layerSel').value=s.c.layer; layerChanged(); }
+  renderTele(true); draw();
+}
+function cur(){ for(var k=0;k<sats.length;k++) if(sats[k].c.id===sel) return sats[k]; return null; }
+
+function renderStatus(){
+  var newest=0; sats.forEach(function(s){ if(s.epoch>newest) newest=s.epoch; });
+  var stale=Date.now()-newest>7*86400000;
+  var label=tleSrc==='live'?L('CelesTrak สด','CelesTrak live'):tleSrc==='cache'?L('CelesTrak (แคชในเครื่อง)','CelesTrak (local cache)'):L('ชุดสำรองในไฟล์','bundled snapshot');
+  $('sTle').innerHTML='<i class="dot '+(stale?'stale':tleSrc==='snapshot'?'':'live')+'"></i>'+label+'<br>'+L('epoch ล่าสุดเมื่อ ','newest epoch ')+age(newest)+L('ก่อน',' ago')+(stale?L(' · เก่าเกิน 7 วัน ตำแหน่งอาจคลาดมาก',' · over 7 days old, positions may be far off'):'');
+  $('sCount').textContent=sats.length;
+}
+function renderTele(full){
+  var s=cur(), box=$('tele'); if(!s){ box.textContent=''; return; }
+  var p=now[s.c.id]||prop(s,Date.now()), lk=look(p), po=PORTAL[s.c.portal];
+  if(full||!box.firstChild){
+    $('tNorad').textContent='NORAD '+s.c.id;
+    var what=s.c.sar?L('ภาพเรดาร์ (ถ่ายได้ทั้งกลางวัน กลางคืน และทะลุเมฆ)','Radar imagery (day, night and through cloud)')
+      :s.c.gas?L('ข้อมูลก๊าซและคุณภาพอากาศ ไม่ใช่ภาพถ่ายพื้นผิว','Trace-gas and air-quality data, not surface imagery')
+      :s.c.alt?L('วัดระดับน้ำทะเลตามแนวใต้ดาวเทียม ไม่มีภาพถ่าย','Sea-level altimetry along the ground track, no imagery')
+      :L('ภาพถ่ายเชิงแสงหลายช่วงคลื่น','Multispectral optical imagery');
+    box.innerHTML='<h3>'+s.c.name+'</h3><p class="sub">'+FAMNAME[s.c.fam]+' · '+what+'</p>'+
+      '<div class="kv">'+
+      '<div><span>'+L('ละติจูด','Latitude')+'</span><b id="kLat"></b></div><div><span>'+L('ลองจิจูด','Longitude')+'</span><b id="kLon"></b></div>'+
+      '<div><span>'+L('ความสูง','Altitude')+'</span><b id="kAlt"></b></div><div><span>'+L('ความเร็ว','Speed')+'</span><b id="kV"></b></div>'+
+      '<div><span>'+L('มุมเงยจาก มจธ.','Elevation from KMUTT')+'</span><b id="kEl"></b></div><div><span>'+L('มุมทิศ','Azimuth')+'</span><b id="kAz"></b></div>'+
+      '</div><dl class="spec">'+
+      '<dt>'+L('เซนเซอร์','Sensor')+'</dt><dd>'+s.c.sensor+'</dd>'+
+      '<dt>'+L('ความละเอียด','Resolution')+'</dt><dd>'+s.c.res+'</dd>'+
+      '<dt>'+L('แนวกวาด','Swath')+'</dt><dd>'+(s.c.swath?s.c.swath.toLocaleString()+' km':L('เฉพาะแนวใต้ดาวเทียม','nadir track only'))+'</dd>'+
+      '<dt>'+L('คาบโคจร','Period')+'</dt><dd>'+s.period.toFixed(1)+L(' นาที',' min')+'</dd>'+
+      '<dt>'+L('มุมเอียง','Inclination')+'</dt><dd>'+(s.i*R2D).toFixed(2)+'°</dd>'+
+      '<dt>'+L('อายุ TLE','TLE age')+'</dt><dd>'+age(s.epoch)+'</dd>'+
+      '</dl><a class="btn" href="'+po.url+'" target="_blank" rel="noopener">'+L('ดาวน์โหลดข้อมูลฟรีที่ ','Free data at ')+po.name+' ↗</a>'+
+      '<p class="note" style="padding:8px 0 0">'+L('ดูและดาวน์โหลดได้ไม่มีค่าใช้จ่าย แต่ต้องสมัครบัญชีผู้ใช้ (ฟรี) ก่อนดาวน์โหลดไฟล์ต้นฉบับ','Viewing and downloading cost nothing. A free account is required to download the original files.')+'</p>';
+  }
+  $('kLat').textContent=fmtLat(p.lat); $('kLon').textContent=fmtLon(p.lon);
+  $('kAlt').textContent=p.alt.toFixed(0)+' km'; $('kV').textContent=p.v.toFixed(2)+' km/s';
+  $('kEl').textContent=lk.el.toFixed(1)+'°'; $('kAz').textContent=lk.el>0?lk.az.toFixed(0)+'°':'—';
+  $('kEl').style.color=lk.el>0?'var(--ok)':'';
+}
+function renderPasses(){
+  var tb=$('passes'), t=Date.now(), rows=passes.filter(function(p){ return p.los>t; });
+  if(!rows.length){ tb.innerHTML='<tr><td colspan="6">'+L('ไม่มีรอบผ่านที่มุมเงยเกิน 10°','No passes above 10° elevation')+'</td></tr>'; return; }
+  tb.innerHTML=rows.map(function(p){
+    var m=Math.round((p.tmax-t)/60000), inTxt=m<=0?L('กำลังผ่าน','now'):m<60?m+L(' นาที',' min'):Math.floor(m/60)+L(' ชม. ',' h ')+(m%60)+L(' น.',' m');
+    var tag=p.shot?'<span class="tag go">'+L('ถ่ายได้','YES')+'</span>':!p.s.c.swath?'<span class="tag">'+L('ไม่มีภาพ','NO IMAGER')+'</span>':!p.inSwath?'<span class="tag">'+L('นอกแนวกวาด','OUT OF SWATH')+'</span>':'<span class="tag">'+L('กลางคืน','NIGHT')+'</span>';
+    return '<tr class="'+(p.shot?'shot':'')+'"><td><i class="dot" style="background:'+FAMCOL[p.s.c.fam]+'"></i>'+p.s.c.name+'</td><td class="num">'+hms(p.tmax,'Asia/Bangkok').slice(0,5)+'</td><td class="num">'+inTxt+'</td><td class="num">'+p.max.toFixed(0)+'°</td><td class="num">'+p.dmin.toFixed(0)+' km</td><td>'+tag+'</td></tr>';
+  }).join('');
+}
+
+/* ───────── map ───────── */
+var cv=$('map'), ctx=cv.getContext('2d'), W=0, H=0;
+function sizeMap(){ var r=cv.getBoundingClientRect(), d=window.devicePixelRatio||1; W=r.width; H=r.height; cv.width=W*d; cv.height=H*d; ctx.setTransform(d,0,0,d,0,0); }
+function X(lon){ return (lon+180)/360*W; } function Y(lat){ return (90-lat)/180*H; }
+function path(pts){ /* polyline that lifts the pen at the date line */
+  ctx.beginPath();
+  for(var k=0;k<pts.length;k++){ if(k&&Math.abs(pts[k][1]-pts[k-1][1])<180) ctx.lineTo(X(pts[k][1]),Y(pts[k][0])); else ctx.moveTo(X(pts[k][1]),Y(pts[k][0])); }
+}
+function draw(){
+  if(!W) return;
+  var t=Date.now(), k, s, p;
+  ctx.clearRect(0,0,W,H);
+  /* graticule */
+  ctx.strokeStyle='rgba(160,182,222,.13)'; ctx.lineWidth=1; ctx.beginPath();
+  for(k=-150;k<=150;k+=30){ ctx.moveTo(X(k),0); ctx.lineTo(X(k),H); }
+  for(k=-60;k<=60;k+=30){ ctx.moveTo(0,Y(k)); ctx.lineTo(W,Y(k)); }
+  ctx.stroke();
+  /* night side */
+  var sn=sun(t), dec=sn.lat*D2R; if(Math.abs(dec)<0.01) dec=0.01;
+  ctx.beginPath(); ctx.moveTo(0,dec>0?H:0);
+  for(k=-180;k<=180;k+=2) ctx.lineTo(X(k),Y(Math.atan(-Math.cos((k-sn.lon)*D2R)/Math.tan(dec))*R2D));
+  ctx.lineTo(W,dec>0?H:0); ctx.closePath(); ctx.fillStyle='rgba(3,5,12,.58)'; ctx.fill();
+  /* Thailand frame + site */
+  ctx.strokeStyle='rgba(224,178,94,.6)'; ctx.setLineDash([3,3]);
+  ctx.strokeRect(X(TH_BOX.w),Y(TH_BOX.n),X(TH_BOX.e)-X(TH_BOX.w),Y(TH_BOX.s)-Y(TH_BOX.n)); ctx.setLineDash([]);
+  ctx.fillStyle='#fff'; ctx.fillRect(X(SITE.lon)-2,Y(SITE.lat)-2,4,4);
+  /* selected satellite: swath and ground track */
+  s=cur();
+  if(s){
+    var col=FAMCOL[s.c.fam], tr=[], past=[];
+    for(k=-20;k<=100;k+=0.5){ p=prop(s,t+k*60000); (k<=0?past:tr).push([p.lat,p.lon]); if(k===0) tr.push([p.lat,p.lon]); }
+    if(s.c.swath){
+      var Lp=[],Rp=[],seg=function(){ if(Lp.length>1){ ctx.beginPath(); Lp.forEach(function(q,i){ i?ctx.lineTo(X(q[1]),Y(q[0])):ctx.moveTo(X(q[1]),Y(q[0])); }); for(var j=Rp.length-1;j>=0;j--) ctx.lineTo(X(Rp[j][1]),Y(Rp[j][0])); ctx.closePath(); ctx.fill(); } Lp=[];Rp=[]; };
+      ctx.fillStyle=col; ctx.globalAlpha=.16;
+      for(k=0;k<tr.length-1;k++){
+        var br=bearing(tr[k][0],tr[k][1],tr[k+1][0],tr[k+1][1]), a=dest(tr[k][0],tr[k][1],br-Math.PI/2,s.c.swath/2), b=dest(tr[k][0],tr[k][1],br+Math.PI/2,s.c.swath/2);
+        if(Lp.length&&(Math.abs(a[1]-Lp[Lp.length-1][1])>90||Math.abs(b[1]-Rp[Rp.length-1][1])>90||Math.abs(a[1]-b[1])>180)) seg();
+        if(Math.abs(a[1]-b[1])<=180&&Math.abs(tr[k][0])<80){ Lp.push(a); Rp.push(b); } else seg();
+      }
+      seg(); ctx.globalAlpha=1;
+    }
+    ctx.lineWidth=1.5; ctx.strokeStyle=col; ctx.globalAlpha=.35; path(past); ctx.stroke();
+    ctx.globalAlpha=.95; path(tr); ctx.stroke(); ctx.globalAlpha=1;
+  }
+  /* all satellites */
+  ctx.font='500 11px "IBM Plex Mono",monospace'; ctx.textBaseline='middle';
+  sats.forEach(function(q){
+    var pp=now[q.c.id]; if(!pp) return;
+    var x=X(pp.lon), y=Y(pp.lat), on=q.c.id===sel;
+    ctx.beginPath(); ctx.arc(x,y,on?5.5:3.5,0,TAU); ctx.fillStyle=FAMCOL[q.c.fam]; ctx.fill();
+    ctx.lineWidth=on?2:1; ctx.strokeStyle=on?'#fff':'rgba(7,11,22,.9)'; ctx.stroke();
+    if(on||W>700){
+      var tx=x+9, w=ctx.measureText(q.c.name).width; if(tx+w>W-4) tx=x-9-w;
+      ctx.lineWidth=3; ctx.strokeStyle='rgba(7,11,22,.85)'; ctx.strokeText(q.c.name,tx,y);
+      ctx.fillStyle=on?'#fff':'rgba(238,242,250,.8)'; ctx.fillText(q.c.name,tx,y);
+    }
+  });
+}
+cv.addEventListener('click',function(ev){
+  var r=cv.getBoundingClientRect(), mx=ev.clientX-r.left, my=ev.clientY-r.top, best=null, bd=18;
+  sats.forEach(function(q){ var pp=now[q.c.id]; if(!pp) return; var d=Math.hypot(X(pp.lon)-mx,Y(pp.lat)-my); if(d<bd){ bd=d; best=q.c.id; } });
+  if(best) select(best);
+});
+
+/* ───────── imagery (NASA GIBS) ───────── */
+var GIBS='https://gibs.earthdata.nasa.gov/wms/epsg4326/best/wms.cgi?SERVICE=WMS&REQUEST=GetMap&VERSION=1.1.1&STYLES=&SRS=EPSG:4326';
+var LAYERS=[
+ {k:'VIIRS_NOAA20',id:'VIIRS_NOAA20_CorrectedReflectance_TrueColor',tms:'250m',th:'NOAA-20 · VIIRS สีจริง (รายวัน)',en:'NOAA-20 · VIIRS true colour (daily)'},
+ {k:'VIIRS_NOAA21',id:'VIIRS_NOAA21_CorrectedReflectance_TrueColor',tms:'250m',th:'NOAA-21 · VIIRS สีจริง (รายวัน)',en:'NOAA-21 · VIIRS true colour (daily)'},
+ {k:'VIIRS_SNPP',id:'VIIRS_SNPP_CorrectedReflectance_TrueColor',tms:'250m',th:'Suomi NPP · VIIRS สีจริง (รายวัน)',en:'Suomi NPP · VIIRS true colour (daily)'},
+ {k:'MODIS_Terra',id:'MODIS_Terra_CorrectedReflectance_TrueColor',tms:'250m',th:'Terra · MODIS สีจริง (รายวัน)',en:'Terra · MODIS true colour (daily)'},
+ {k:'MODIS_Aqua',id:'MODIS_Aqua_CorrectedReflectance_TrueColor',tms:'250m',th:'Aqua · MODIS สีจริง (รายวัน)',en:'Aqua · MODIS true colour (daily)'},
+ {k:'HLS_S30',id:'HLS_S30_Nadir_BRDF_Adjusted_Reflectance',tms:'31.25m',sparse:true,th:'Sentinel-2 · HLS 30 ม.',en:'Sentinel-2 · HLS 30 m'},
+ {k:'HLS_L30',id:'HLS_L30_Nadir_BRDF_Adjusted_Reflectance',tms:'31.25m',sparse:true,th:'Landsat 8/9 · HLS 30 ม.',en:'Landsat 8/9 · HLS 30 m'}
+];
+var REGIONS=[
+ {k:'th',box:[97,5.5,106,20.6],w:540,h:906,th:'ประเทศไทย',en:'Thailand'},
+ {k:'bkk',box:[100,13.2,101,14.2],w:720,h:720,th:'กรุงเทพฯ และปริมณฑล',en:'Greater Bangkok'},
+ {k:'sea',box:[90,-12,142,30],w:900,h:727,th:'เอเชียตะวันออกเฉียงใต้',en:'Southeast Asia'}
+];
+var latest={};
+function iso(ms){ return new Date(ms).toISOString().slice(0,10); }
+function layer(){ var v=$('layerSel').value; return LAYERS.filter(function(l){return l.k===v;})[0]; }
+function region(){ var v=$('regionSel').value; return REGIONS.filter(function(r){return r.k===v;})[0]; }
+function fillSelects(){
+  var lv=$('layerSel').value||'VIIRS_NOAA20', rv=$('regionSel').value||'th';
+  $('layerSel').innerHTML=LAYERS.map(function(l){ return '<option value="'+l.k+'">'+L(l.th,l.en)+'</option>'; }).join('');
+  $('regionSel').innerHTML=REGIONS.map(function(r){ return '<option value="'+r.k+'">'+L(r.th,r.en)+'</option>'; }).join('');
+  $('layerSel').value=lv; $('regionSel').value=rv;
+}
+/* The newest day a layer has been published for. Thailand is imaged around 03–07 UTC,
+   so before ~10 UTC "today" exists in the archive but is still blank over the region. */
+function defaultDate(l){
+  var today=iso(Date.now()), d=latest[l.k]||today;
+  if(d>=today) d=new Date().getUTCHours()>=10?today:iso(Date.now()-86400000);
+  return d;
+}
+function findLatest(l){
+  if(latest[l.k]) return Promise.resolve();
+  var u='https://gibs.earthdata.nasa.gov/wmts/epsg4326/best/1.0.0/'+l.id+'/default/'+l.tms+'/all/'+iso(Date.now()-120*86400000)+'--'+iso(Date.now())+'.xml';
+  return fetch(u).then(function(r){ return r.text(); }).then(function(x){
+    var m=x.match(/\d{4}-\d{2}-\d{2}(?=\/P1D<\/Domain>)/)||[], all=x.match(/\/(\d{4}-\d{2}-\d{2})\/P1D/g);
+    if(all&&all.length) latest[l.k]=all[all.length-1].slice(1,11); else if(m[0]) latest[l.k]=m[0];
+  }).catch(function(){});
+}
+function layerChanged(){
+  var l=layer(); if(l.sparse&&$('regionSel').value==='sea') $('regionSel').value='th';
+  findLatest(l).then(function(){ if(layer()!==l) return; $('dateIn').max=latest[l.k]||iso(Date.now()); $('dateIn').value=defaultDate(l); showShot(); });
+}
+function showShot(){
+  var l=layer(), r=region(), d=$('dateIn').value, img=$('shot'), ref=$('shotRef'), msg=$('shotMsg');
+  if(!d) return;
+  var q='&BBOX='+r.box.join(',')+'&WIDTH='+r.w+'&HEIGHT='+r.h;
+  msg.textContent=L('กำลังโหลดภาพ…','Loading image…'); img.style.visibility='hidden';
+  img.onload=function(){ img.style.visibility='visible'; msg.textContent=''; };
+  img.onerror=function(){ msg.textContent=L('โหลดภาพไม่ได้ ตรวจการเชื่อมต่ออินเทอร์เน็ต หรือเลือกวันอื่น','Could not load the image. Check the connection or pick another date.'); };
+  img.src=GIBS+'&LAYERS='+l.id+'&TIME='+d+q+'&FORMAT=image/'+(l.sparse?'png&TRANSPARENT=TRUE':'jpeg');
+  ref.src=GIBS+'&LAYERS=Reference_Features_15m'+q+'&FORMAT=image/png&TRANSPARENT=TRUE';
+  var last=latest[l.k];
+  $('shotCap').textContent=L(l.th,l.en)+' · '+d+' (UTC)'+(last?L(' · ล่าสุดที่เผยแพร่ ',' · latest published ')+last:'')+(l.sparse?L(' · มีภาพเฉพาะแนวที่ดาวเทียมผ่านในวันนั้น พื้นที่ว่างคือไม่มีข้อมูล',' · only the strip imaged that day is shown; blank areas have no data'):'');
+  $('shotLink').href='https://worldview.earthdata.nasa.gov/?v='+r.box.join(',')+'&l=Reference_Features_15m,'+l.id+'&t='+d;
+  if(baseMode==='daily') setBase();
+}
+function shiftDay(n){ var d=$('dateIn').value; if(!d) return; var v=iso(Date.parse(d+'T00:00:00Z')+n*86400000), mx=$('dateIn').max; if(mx&&v>mx) return; $('dateIn').value=v; showShot(); }
+$('layerSel').addEventListener('change',layerChanged);
+$('regionSel').addEventListener('change',showShot);
+$('dateIn').addEventListener('change',showShot);
+$('dPrev').addEventListener('click',function(){ shiftDay(-1); });
+$('dNext').addEventListener('click',function(){ shiftDay(1); });
+
+/* world basemap behind the canvas */
+var baseMode='marble';
+function setBase(){
+  var q='&BBOX=-180,-90,180,90&WIDTH=2048&HEIGHT=1024&FORMAT=image/jpeg', l=layer();
+  if(baseMode==='daily'&&l&&!l.sparse&&$('dateIn').value) $('base').src=GIBS+'&LAYERS='+l.id+'&TIME='+$('dateIn').value+q;
+  else $('base').src=GIBS+'&LAYERS=BlueMarble_ShadedRelief_Bathymetry'+q;
+}
+document.querySelectorAll('#baseSeg button').forEach(function(b){
+  b.addEventListener('click',function(){ baseMode=b.dataset.base; document.querySelectorAll('#baseSeg button').forEach(function(o){ o.setAttribute('aria-pressed',o===b); }); setBase(); });
+});
+
+/* ───────── loop ───────── */
+function tick(){
+  var t=Date.now(), over=[];
+  $('sUtc').textContent=hms(t,'UTC'); $('sBkk').textContent=hms(t,'Asia/Bangkok');
+  sats.forEach(function(s){ var p=now[s.c.id]=prop(s,t); if(inTh(p)) over.push(s.c.name); });
+  $('sOver').textContent=over.length?over.length+' · '+over.join(', '):'0';
+  $('sOver').className=over.length>1?'small':'';
+  document.querySelectorAll('#fleet button').forEach(function(b){
+    var p=now[b.dataset.id], em=b.querySelector('em'); if(!p) return;
+    em.textContent=fmtLat(p.lat)+' '+fmtLon(p.lon); em.className=inTh(p)?'over':'';
+  });
+  renderTele(false); draw();
+}
+function renderAll(){ fillSelects(); renderFleet(); renderStatus(); renderTele(true); renderPasses(); if($('dateIn').value) showShot(); tick(); }
+
+if(lang!=='th') applyLang(lang);
+fillSelects(); sizeMap(); setBase(); initElements(); layerChanged();
+setInterval(tick,1000);
+setInterval(function(){ renderPasses(); renderStatus(); },30000);
+setInterval(function(){ computePasses(); renderPasses(); },600000);
+var rt; addEventListener('resize',function(){ clearTimeout(rt); rt=setTimeout(function(){ sizeMap(); draw(); },120); });
+})();
+</script>
+</body>
+</html>

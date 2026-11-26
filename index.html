@@ -2,541 +2,534 @@
 <html lang="th">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>อวกาศบางมด — Thonburi Space Innovation Hub</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>อวกาศบางมด — Thonburi Space Economy and Engineering Innovation Center</title>
+<meta name="description" content="อวกาศบางมด (Thonburi Space Economy and Engineering Innovation Center) ศูนย์กลางนวัตกรรมอวกาศของ มจธ. ภายใต้ CISS — สื่อสารดาวเทียม HAPS ดาวเทียมขนาดเล็ก และที่ปรึกษาสำหรับธุรกิจไทย">
+<meta property="og:title" content="อวกาศบางมด — Thonburi Space Economy and Engineering Innovation Center">
+<meta property="og:description" content="อวกาศที่ใช้งานได้จริงสำหรับธุรกิจไทย">
+<meta property="og:image" content="https://chirasil.github.io/thonburi-space/images/ts-hero-bangkok.jpg">
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700;800&family=Orbitron:wght@500;700;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&family=IBM+Plex+Sans+Thai:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <style>
-  :root{
-    --bg:#0f1729;
-    --bg2:#1a2740;
-    --panel:#16223c;
-    --panel2:#1c2c4a;
-    --gold:#cfa769;
-    --gold-bright:#ecd1a0;
-    --text:#f1f5fc;
-    --muted:#a6b6d2;
-    --line:rgba(207,167,105,.20);
-  }
-  *{margin:0;padding:0;box-sizing:border-box}
-  html{scroll-behavior:smooth}
-  body{background:var(--bg);color:var(--text);font-family:'Inter','Sarabun',sans-serif;overflow-x:hidden;line-height:1.6;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
-  body.th{font-family:'Sarabun','Inter',sans-serif}
-  .en{display:none}
-  body.lang-en .en{display:inline}
-  body.lang-en .th-txt{display:none}
-  #stars{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.7}
-  .wrap{position:relative;z-index:2}
+/* Layout: an ascent told in full-bleed scenes. Bangkok from orbit opens the page,
+   then the story climbs ground → stratosphere → orbit and returns to the Gulf of Thailand.
+   Dark bands carry the story; light bands carry the things people scan (news, paths, team). */
+:root{
+  --void:#070b16;        /* shared night that every scene fades into */
+  --navy:#0b1430;        /* contact + footer */
+  --ink:#eef2fa;
+  --dim:#a3b0c8;
+  --signal:#e0b25e;      /* Thonburi gold, buttons and highlights only */
+  --signal-ink:#1b1406;
+  --paper:#f3f5f9;       /* light bands */
+  --paper-2:#e8ecf3;
+  --paper-ink:#0e1526;
+  --paper-dim:#4f5c75;
+  --paper-line:rgba(14,21,38,.12);
+  --line:rgba(160,182,222,.18);
+  --f-display:'Chakra Petch','IBM Plex Sans Thai',system-ui,sans-serif;
+  --f-body:'IBM Plex Sans Thai',system-ui,sans-serif;
+  --f-mono:'IBM Plex Mono',ui-monospace,Menlo,monospace;
+  --wrap:1180px;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--void);color:var(--ink);font-family:var(--f-body);font-size:1.0625rem;line-height:1.75;-webkit-font-smoothing:antialiased}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:60;background:var(--void)}
+a{color:inherit}
+img{max-width:100%}
+:focus-visible{outline:2px solid var(--signal);outline-offset:3px;border-radius:4px}
+h1,h2,h3{font-family:var(--f-display);font-weight:600;margin:0;text-wrap:balance;line-height:1.22}
+p{margin:0}
+.gut{padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.inner{max-width:var(--wrap);margin:0 auto;width:100%}
+.mono{font-family:var(--f-mono);font-size:.74rem;letter-spacing:.1em;text-transform:uppercase}
 
-  /* scroll progress */
-  #progress{position:fixed;top:0;left:0;height:3px;width:0;background:linear-gradient(90deg,var(--gold),var(--gold-bright));z-index:60;box-shadow:0 0 12px rgba(207,167,105,.6);transition:width .1s linear}
+/* NAV */
+.nav{position:fixed;top:env(safe-area-inset-top,0px);left:0;right:0;z-index:50;background:linear-gradient(rgba(7,11,22,.86),rgba(7,11,22,.55));backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+.nav .inner{display:flex;align-items:center;justify-content:space-between;gap:16px;padding-block:12px}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none}
+.brand svg{width:30px;height:30px;flex:none}
+.brand b{display:block;font-family:var(--f-display);font-weight:600;font-size:1rem;line-height:1.15}
+.brand small{display:block;font-family:var(--f-mono);font-size:.58rem;letter-spacing:.16em;color:var(--signal);max-width:23em;line-height:1.4}
+.links{display:flex;align-items:center;gap:24px}
+.links a{text-decoration:none;color:var(--dim);font-family:var(--f-display);font-weight:500;font-size:.95rem}
+.links a:hover{color:var(--ink)}
+.chip-btn{font-family:var(--f-mono);font-size:.72rem;letter-spacing:.08em;background:none;color:var(--ink);border:1px solid rgba(238,242,250,.3);padding:6px 11px;border-radius:6px;cursor:pointer;text-decoration:none}
+.chip-btn:hover{border-color:var(--signal);color:var(--signal)}
+.burger{display:none}
 
-  /* NAV */
-  nav{position:fixed;top:0;left:0;right:0;z-index:50;display:flex;align-items:center;justify-content:space-between;padding:16px 6vw;background:rgba(15,23,41,.7);backdrop-filter:blur(16px);border-bottom:1px solid var(--line);transition:.3s}
-  .brand{display:flex;align-items:center;gap:12px;cursor:pointer}
-  .logo-mark{width:40px;height:40px;flex-shrink:0;filter:drop-shadow(0 2px 6px rgba(0,0,0,.4))}
-  .brand-text{display:flex;flex-direction:column;line-height:1.1}
-  .brand-text .t-th{font-family:'Sarabun';font-weight:700;font-size:1.02rem;letter-spacing:.5px}
-  .brand-text .t-en{font-family:'Orbitron';font-size:.55rem;letter-spacing:2.5px;color:var(--gold);font-weight:500;margin-top:1px}
-  .nav-links{display:flex;gap:26px;align-items:center}
-  .nav-links a{color:var(--muted);text-decoration:none;font-size:.84rem;font-weight:500;letter-spacing:.3px;transition:.25s;position:relative}
-  .nav-links a:hover{color:var(--gold-bright)}
-  .nav-links a::after{content:'';position:absolute;left:0;bottom:-6px;width:0;height:1px;background:var(--gold);transition:.3s}
-  .nav-links a:hover::after{width:100%}
-  .lang-toggle{border:1px solid var(--line);background:transparent;color:var(--text);padding:6px 14px;border-radius:30px;cursor:pointer;font-size:.75rem;font-weight:600;letter-spacing:1px;transition:.25s;font-family:'Orbitron'}
-  .lang-toggle:hover{border-color:var(--gold);color:var(--gold-bright);box-shadow:0 0 18px rgba(207,167,105,.2)}
-  .menu-btn{display:none;background:none;border:none;color:var(--text);font-size:1.6rem;cursor:pointer}
+/* HERO */
+.hero{position:relative;min-height:min(100vh,920px);display:flex;align-items:center;isolation:isolate;overflow:hidden}
+.hero img.bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:70% 50%;z-index:-2}
+.hero::before{content:"";position:absolute;inset:0;z-index:-1;background:
+  linear-gradient(90deg,rgba(7,11,22,.92) 0%,rgba(7,11,22,.7) 38%,rgba(7,11,22,.1) 70%),
+  linear-gradient(180deg,rgba(7,11,22,.5),transparent 25%,transparent 75%,var(--void))}
+.hero .inner{padding-block:120px 110px}
+.hero .herocopy{max-width:640px}
+.hero .kicker{color:var(--signal);margin-bottom:22px;display:flex;gap:10px;align-items:center}
+.hero .kicker i{width:7px;height:7px;border-radius:50%;background:var(--signal)}
+.hero h1{font-size:clamp(2.1rem,5vw,4.2rem);letter-spacing:0;text-wrap:initial}
+.hero h1 .ln{display:block;white-space:nowrap}
+.hero h1 em{font-style:normal;color:var(--signal)}
+.hero p.lede{margin-top:22px;font-size:1.12rem;color:#dbe3f2;max-width:34em}
+.hero .textlink{display:inline-flex;gap:8px;margin-top:28px;font-family:var(--f-display);font-weight:500;text-decoration:none;color:var(--ink);border-bottom:1px solid var(--signal);padding-bottom:3px}
+.hero .textlink:hover{color:var(--signal)}
+.chev{position:absolute;right:max(24px,6vw);bottom:48px;display:grid;gap:2px;opacity:.7}
+.chev span{width:34px;height:14px;border-right:1.5px solid var(--ink);border-bottom:1.5px solid var(--ink);transform:rotate(45deg) scale(.7);transform-origin:center}
+.credit{position:absolute;right:max(16px,env(safe-area-inset-right,0px));bottom:14px;font-family:var(--f-mono);font-size:.64rem;letter-spacing:.04em;color:rgba(238,242,250,.6);max-width:60%;text-align:right;line-height:1.4}
 
-  /* HERO */
-  header.hero{min-height:100vh;display:flex;align-items:center;padding:120px 6vw 80px;position:relative;overflow:hidden}
-  .hero-bg{position:absolute;inset:0;z-index:0;background:#0f1729 url('https://images.unsplash.com/photo-1462331940025-496dfbfc7564?q=80&w=1600') center/cover no-repeat;opacity:.55;animation:kenburns 26s ease-in-out infinite alternate}
-  @keyframes kenburns{0%{transform:scale(1) translate(0,0)}100%{transform:scale(1.14) translate(-1.5%,1%)}}
-  .hero-overlay{position:absolute;inset:0;z-index:1;background:linear-gradient(95deg,var(--bg) 26%,rgba(15,23,41,.6) 55%,rgba(15,23,41,.15) 100%)}
-  .hero-inner{max-width:680px;position:relative;z-index:4}
-  .hero-logo-row{display:flex;align-items:center;gap:12px;margin-bottom:30px}
-  .hero-logo-row svg{width:34px;height:34px;filter:drop-shadow(0 2px 6px rgba(0,0,0,.5))}
-  .hero-logo-row span{font-family:'Orbitron';color:var(--gold-bright);font-size:.78rem;letter-spacing:4px;font-weight:600;text-shadow:0 2px 10px rgba(0,0,0,.7)}
-  .badge{display:inline-block;border:1px solid var(--gold);color:var(--gold-bright);border-radius:30px;padding:7px 20px;font-size:.78rem;letter-spacing:1px;margin-bottom:24px;font-weight:600;background:rgba(15,23,41,.5);backdrop-filter:blur(4px)}
-  .hero h1{font-family:'Sarabun';font-weight:800;font-size:clamp(3rem,8vw,6rem);letter-spacing:1px;line-height:1.02;text-shadow:0 4px 30px rgba(0,0,0,.8),0 2px 8px rgba(0,0,0,.6)}
-  .hero h1 .gold{color:var(--gold-bright)}
-  .hero .est{font-family:'Orbitron';color:var(--gold-bright);font-size:.72rem;letter-spacing:4px;margin:18px 0 0;font-weight:600;text-shadow:0 2px 10px rgba(0,0,0,.7)}
-  .hero p.tag{max-width:520px;color:#dde6f5;font-size:1.1rem;margin:22px 0 0;text-shadow:0 2px 14px rgba(0,0,0,.8)}
-  .hero-btns{display:flex;gap:16px;margin-top:38px;flex-wrap:wrap}
-  .btn{padding:14px 30px;border-radius:40px;font-weight:600;font-size:.92rem;text-decoration:none;transition:.3s;cursor:pointer;border:1px solid transparent;letter-spacing:.4px}
-  .btn-gold{background:linear-gradient(135deg,var(--gold),var(--gold-bright));color:#1a1305;box-shadow:0 6px 26px rgba(207,167,105,.35)}
-  .btn-gold:hover{transform:translateY(-3px);box-shadow:0 10px 34px rgba(207,167,105,.5)}
-  .btn-ghost{border-color:var(--gold);color:var(--text);background:rgba(15,23,41,.4);backdrop-filter:blur(4px)}
-  .btn-ghost:hover{border-color:var(--gold-bright);color:var(--gold-bright);background:rgba(207,167,105,.1)}
+/* LATEST (light) */
+.latest{background:var(--paper);color:var(--paper-ink);padding-block:64px 72px}
+.sec-head{display:flex;justify-content:space-between;align-items:baseline;gap:16px;flex-wrap:wrap;margin-bottom:28px}
+.sec-head h2{font-size:clamp(1.6rem,3vw,2.2rem)}
+.latest .mono{color:var(--paper-dim)}
+.news{display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:20px}
+.news article{background:#fff;border:1px solid var(--paper-line);border-radius:12px;padding:24px 24px 26px;display:flex;flex-direction:column;gap:10px;min-width:0}
+.news article.lead{background:var(--paper-ink);color:var(--ink);border-color:transparent}
+.news time{font-family:var(--f-mono);font-size:.74rem;color:var(--paper-dim);letter-spacing:.04em}
+.news .lead time{color:var(--signal)}
+.news h3{font-size:1.2rem}
+.news .lead h3{font-size:1.5rem}
+.news p{color:var(--paper-dim);font-size:.96rem;line-height:1.65}
+.news .lead p{color:var(--dim)}
+.tag{align-self:flex-start;font-family:var(--f-mono);font-size:.66rem;letter-spacing:.08em;text-transform:uppercase;padding:3px 8px;border-radius:999px;border:1px solid var(--paper-line);color:var(--paper-dim)}
+.lead .tag{border-color:var(--signal);color:var(--signal)}
 
-  /* PLANET (real image + rings) */
-  .planet-scene{position:absolute;right:-4vw;top:50%;transform:translateY(-50%);width:min(660px,66vw);height:min(660px,66vw);z-index:2;pointer-events:none}
-  .planet-img{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:46%;height:46%;border-radius:50%;
-    background:
-      url('images/earth.jpg') center/cover no-repeat,
-      url('https://upload.wikimedia.org/wikipedia/commons/thumb/9/97/The_Earth_seen_from_Apollo_17.jpg/512px-The_Earth_seen_from_Apollo_17.jpg') center/cover no-repeat,
-      radial-gradient(circle at 38% 34%, #5aa0d8 0%, #2f6aa0 38%, #163f63 70%, #061625 100%);
-    filter:saturate(1.14) contrast(1.05) brightness(1.05);
-    box-shadow:
-      0 0 64px rgba(95,165,240,.42),
-      0 0 165px rgba(70,130,210,.26),
-      inset -12px -12px 46px rgba(0,5,15,.55);
-    animation:floaty 7s ease-in-out infinite;overflow:hidden}
-  .planet-img::before{content:'';position:absolute;inset:0;border-radius:50%;
-    background:radial-gradient(circle at 72% 74%, rgba(0,6,16,.5), transparent 56%)}
-  .planet-img::after{content:'';position:absolute;inset:-1px;border-radius:50%;
-    box-shadow:inset 0 0 28px 4px rgba(130,185,255,.34);
-    background:radial-gradient(circle at 34% 30%, transparent 60%, rgba(130,185,255,.10) 90%, transparent)}
-  @keyframes floaty{0%,100%{margin-top:0}50%{margin-top:-16px}}
-  .ring{position:absolute;top:50%;left:50%;border:1px solid rgba(207,167,105,.30);border-radius:50%;transform:translate(-50%,-50%) rotateX(74deg)}
-  .r1{width:60%;height:60%;animation:spin 26s linear infinite}
-  .r2{width:76%;height:76%;border-color:rgba(207,167,105,.20);animation:spin 40s linear infinite reverse}
-  .r3{width:94%;height:94%;border-color:rgba(180,200,230,.16);animation:spin 60s linear infinite}
-  .moon{position:absolute;border-radius:50%;box-shadow:0 0 14px rgba(0,0,0,.5)}
-  .m1{width:24px;height:24px;top:16%;left:62%;background:radial-gradient(circle at 35% 30%,#c9a87e,#6e4f30)}
-  .m2{width:15px;height:15px;top:76%;left:30%;background:radial-gradient(circle at 35% 30%,#cdd6e6,#5a6478)}
-  .m3{width:10px;height:10px;top:40%;left:8%;background:radial-gradient(circle at 35% 30%,#9fb0cc,#3d4860)}
-  @keyframes spin{from{transform:translate(-50%,-50%) rotateX(74deg) rotateZ(0)}to{transform:translate(-50%,-50%) rotateX(74deg) rotateZ(360deg)}}
+/* INTERSTITIAL */
+.inter{position:relative;padding-block:120px 80px;text-align:left;overflow:hidden;isolation:isolate}
+.inter canvas{position:absolute;inset:0;width:100%;height:100%;z-index:-1}
+.inter h2{font-size:clamp(2rem,4.4vw,3.4rem);max-width:15em}
+.inter p{margin-top:14px;color:var(--dim);font-size:1.15rem;max-width:36em}
+.altitude{margin-top:36px;display:flex;flex-wrap:wrap;gap:8px 0;font-family:var(--f-mono);font-size:.78rem;letter-spacing:.06em;color:var(--dim)}
+.altitude a{text-decoration:none;display:flex;align-items:center;gap:10px;padding:8px 18px 8px 0}
+.altitude a b{color:var(--ink);font-weight:500}
+.altitude a::after{content:"";width:28px;height:1px;background:var(--line)}
+.altitude a:last-child::after{display:none}
+.altitude a:hover b{color:var(--signal)}
 
-  /* SECTIONS */
-  section{padding:100px 6vw;position:relative}
-  .sec-head{text-align:center;max-width:780px;margin:0 auto 60px}
-  .sec-tag{font-family:'Orbitron';color:var(--gold-bright);font-size:.72rem;letter-spacing:5px;font-weight:600;text-transform:uppercase}
-  .sec-head h2{font-family:'Sarabun';font-weight:700;font-size:clamp(1.8rem,4vw,2.8rem);margin:14px 0 14px}
-  .sec-head p{color:var(--muted);font-size:1.02rem}
-  .reveal{opacity:0;transform:translateY(40px);transition:.8s cubic-bezier(.2,.7,.2,1)}
-  .reveal.show{opacity:1;transform:none}
+/* SCENES */
+.scene{position:relative;min-height:min(96vh,880px);display:grid;align-items:end;isolation:isolate;overflow:hidden}
+.scene img.bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-2}
+.scene::before{content:"";position:absolute;inset:0;z-index:-1}
+.scene .inner{display:grid;padding-block:120px 96px}
+.scene .text{width:min(100%,500px);display:grid;gap:16px}
+.scene.right .text{justify-self:end}
+.scene .alt{color:var(--signal)}
+.scene h2{font-size:clamp(1.9rem,3.8vw,3rem)}
+.scene p{color:#dde4f2}
+.scene .proof{display:flex;flex-wrap:wrap;gap:6px 22px;font-family:var(--f-mono);font-size:.78rem;color:var(--dim);font-variant-numeric:tabular-nums;padding-top:4px;border-top:1px solid var(--line)}
+.scene .proof b{color:var(--ink);font-weight:500}
+.btn{justify-self:start;display:inline-flex;align-items:center;gap:8px;padding:11px 20px;border-radius:6px;background:var(--signal);color:var(--signal-ink);font-family:var(--f-display);font-weight:600;font-size:.95rem;text-decoration:none;transition:transform .2s}
+.btn:hover{transform:translateY(-2px)}
+.btn.ghost{background:transparent;color:var(--ink);border:1px solid rgba(238,242,250,.35)}
+.btn.ghost:hover{border-color:var(--signal);color:var(--signal)}
 
-  /* ABOUT */
-  .about-grid{display:grid;grid-template-columns:1.1fr 1fr;gap:50px;max-width:1100px;margin:0 auto;align-items:center}
-  .about-text h3{font-size:1.45rem;margin-bottom:16px;color:var(--gold-bright);font-family:'Sarabun'}
-  .about-text p{color:var(--muted);margin-bottom:16px}
-  .stats{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:30px}
-  .stat{background:linear-gradient(160deg,var(--panel),var(--bg2));border:1px solid var(--line);border-radius:16px;padding:22px;text-align:center;transition:.3s}
-  .stat:hover{border-color:var(--gold);transform:translateY(-4px)}
-  .stat .num{font-family:'Orbitron';font-size:1.9rem;font-weight:700;color:var(--gold-bright)}
-  .stat .lbl{font-size:.8rem;color:var(--muted);margin-top:4px}
-  .about-visual{display:flex;align-items:center;justify-content:center;position:relative}
-  .about-photo{width:min(360px,80vw);height:min(360px,80vw);border-radius:24px;object-fit:cover;border:1px solid var(--line);box-shadow:0 24px 60px rgba(0,0,0,.5)}
-  .about-orbit{position:absolute;width:80px;height:80px;right:-10px;top:-10px;animation:rotz 30s linear infinite;filter:drop-shadow(0 2px 8px rgba(0,0,0,.6))}
-  @keyframes rotz{from{transform:rotate(0)}to{transform:rotate(360deg)}}
+.s-ground img.bg{object-position:30% 40%}
+.s-ground::before{background:linear-gradient(var(--void),transparent 22%,transparent 60%,var(--void)),linear-gradient(270deg,rgba(7,11,22,.85) 0%,rgba(7,11,22,.35) 45%,transparent 70%)}
 
-  /* CARDS */
-  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:24px;max-width:1150px;margin:0 auto}
-  .card{background:linear-gradient(160deg,var(--panel),var(--bg2));border:1px solid var(--line);border-radius:18px;padding:30px;transition:.35s;position:relative;overflow:hidden}
-  .card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--gold),transparent);opacity:0;transition:.35s;z-index:3}
-  .card:hover{transform:translateY(-8px);border-color:rgba(207,167,105,.5);box-shadow:0 24px 54px rgba(0,0,0,.55)}
-  .card:hover::before{opacity:1}
-  .card-img{height:170px;margin:-30px -30px 22px;background-size:cover;background-position:center;position:relative;transition:.5s}
-  .card:hover .card-img{transform:scale(1.06)}
-  .card-img::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(15,23,41,.1),var(--panel) 96%)}
-  .card .icon{width:54px;height:54px;border-radius:14px;background:rgba(207,167,105,.12);display:flex;align-items:center;justify-content:center;margin-bottom:18px;font-size:1.55rem;border:1px solid var(--line)}
-  .card h3{font-size:1.18rem;margin-bottom:10px;font-family:'Sarabun'}
-  .card p{color:var(--muted);font-size:.92rem}
-  .card .cat{display:inline-block;font-size:.66rem;letter-spacing:2px;color:var(--gold-bright);text-transform:uppercase;font-weight:600;margin-bottom:12px;font-family:'Orbitron';position:relative;z-index:2}
-  .qr-crop{width:160px;height:160px;margin:0 auto 18px;border-radius:14px;overflow:hidden;position:relative;background:#fff;border:1px solid var(--line)}
-  .qr-crop img{position:absolute;left:50%;top:48%;transform:translate(-50%,-50%);width:127%}
-  .ig-link{display:inline-block;margin-top:14px;color:var(--gold-bright);text-decoration:none;font-weight:600;font-size:.9rem;letter-spacing:.3px;transition:.25s}
-  .ig-link:hover{color:var(--gold)}
+.s-haps{display:block;min-height:auto;background:var(--void)}
+.s-haps .split{display:grid;grid-template-columns:1fr 1fr;min-height:min(96vh,880px)}
+.s-haps .media{position:relative;overflow:hidden;min-width:0}
+.s-haps .media img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 62%;
+  -webkit-mask-image:linear-gradient(90deg,transparent 0%,#000 38%),linear-gradient(transparent 0%,#000 22%,#000 78%,transparent 100%);
+  -webkit-mask-composite:source-in;mask-image:linear-gradient(90deg,transparent 0%,#000 38%),linear-gradient(transparent 0%,#000 22%,#000 78%,transparent 100%);mask-composite:intersect}
+.s-haps .media .credit{color:rgba(238,242,250,.55)}
+.s-haps .textcol{display:grid;align-content:center;justify-items:end;padding-block:96px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:clamp(24px,5vw,72px)}
+.s-haps .text{width:min(100%,500px)}
 
-  /* INVESTOR */
-  .investor{position:relative;overflow:hidden}
-  .investor::before{content:'';position:absolute;inset:0;background:url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=1600') center/cover;opacity:.18;z-index:0}
-  .invest-box{max-width:1000px;margin:0 auto;background:linear-gradient(135deg,rgba(22,34,60,.92),rgba(15,23,41,.92));backdrop-filter:blur(6px);border:1px solid var(--line);border-radius:24px;padding:55px 50px;text-align:center;position:relative;overflow:hidden;z-index:2}
-  .invest-box::after{content:'';position:absolute;width:320px;height:320px;background:radial-gradient(circle,rgba(207,167,105,.16),transparent 70%);top:-110px;right:-90px;border-radius:50%}
-  .invest-box h2{font-family:'Sarabun';font-size:clamp(1.6rem,3.5vw,2.4rem);margin-bottom:18px;position:relative}
-  .invest-box>p{color:var(--muted);max-width:640px;margin:0 auto;position:relative}
-  .invest-points{display:flex;gap:30px;justify-content:center;flex-wrap:wrap;margin-top:40px;position:relative}
-  .ip{flex:1;min-width:170px}
-  .ip .ic{font-size:1.9rem;margin-bottom:10px}
-  .ip h4{color:var(--gold-bright);margin-bottom:6px;font-family:'Sarabun'}
-  .ip p{font-size:.86rem;color:var(--muted)}
+.s-orbit img.bg{object-position:60% 30%}
+.s-orbit::before{background:linear-gradient(var(--void),transparent 15%,transparent 55%,var(--void)),linear-gradient(90deg,rgba(7,11,22,.8) 0%,rgba(7,11,22,.3) 45%,transparent 70%)}
 
-  /* EVENTS */
-  .event{max-width:920px;margin:0 auto;display:grid;grid-template-columns:140px 1fr;gap:30px;background:linear-gradient(135deg,var(--panel),var(--bg2));border:1px solid var(--line);border-radius:20px;padding:34px 40px;align-items:center;transition:.35s}
-  .event:hover{border-color:var(--gold);box-shadow:0 18px 44px rgba(0,0,0,.45)}
-  .event-date{text-align:center;border-right:1px solid var(--line);padding-right:24px}
-  .event-date .d{font-family:'Orbitron';font-size:3.4rem;font-weight:900;color:var(--gold-bright);line-height:1}
-  .event-date .m{font-family:'Orbitron';letter-spacing:2px;color:var(--gold);font-size:.8rem;margin-top:6px}
-  .event-date .y{color:var(--muted);font-size:.78rem;margin-top:2px}
-  .event-info .etag{font-family:'Orbitron';font-size:.64rem;letter-spacing:3px;color:var(--gold-bright);text-transform:uppercase}
-  .event-info h3{font-family:'Sarabun';font-size:1.4rem;margin:8px 0 8px}
-  .event-info .meta{color:var(--muted);font-size:.9rem;margin-bottom:14px}
-  .event-info .meta span{margin-right:18px}
+.s-gulf img.bg{object-position:50% 20%}
+.s-gulf::before{background:linear-gradient(var(--void),transparent 20%,rgba(7,11,22,.35) 60%,var(--void)),linear-gradient(270deg,rgba(7,11,22,.75),transparent 60%)}
 
-  /* TEAM */
-  .team-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:24px;max-width:1000px;margin:0 auto}
-  .member{text-align:center}
-  .avatar{width:120px;height:120px;border-radius:50%;margin:0 auto 16px;background:linear-gradient(135deg,var(--panel2),var(--panel));border:2px solid var(--line);display:flex;align-items:center;justify-content:center;font-family:'Orbitron';font-size:2rem;color:var(--gold-bright);transition:.3s;overflow:hidden}
-  .avatar img{width:100%;height:100%;object-fit:cover;display:block}
-  .member:hover .avatar{border-color:var(--gold);box-shadow:0 0 28px rgba(207,167,105,.35);transform:translateY(-4px)}
-  .member h4{font-size:1.05rem;font-family:'Sarabun'}
-  .member .role{color:var(--gold-bright);font-size:.8rem;letter-spacing:.5px;margin-top:3px}
+/* PATHS (light) */
+.light{background:var(--paper);color:var(--paper-ink);padding-block:88px}
+.light .mono{color:var(--paper-dim)}
+.light .intro{color:var(--paper-dim);max-width:40em;margin-top:10px}
+.paths{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px;margin-top:36px}
+.path{background:#fff;border:1px solid var(--paper-line);border-radius:12px;padding:28px;display:flex;flex-direction:column;gap:12px;text-decoration:none;transition:border-color .2s,transform .2s;min-width:0}
+.path:hover{border-color:var(--paper-ink);transform:translateY(-3px)}
+.path h3{font-size:1.28rem}
+.path p{color:var(--paper-dim);font-size:.96rem;line-height:1.65}
+.path ul{margin:0;padding:0;list-style:none;display:grid;gap:6px;font-size:.94rem;color:var(--paper-ink)}
+.path li{padding-left:16px;position:relative}
+.path li::before{content:"";position:absolute;left:0;top:.8em;width:7px;height:1.5px;background:var(--signal)}
+.path .go{margin-top:auto;padding-top:8px;font-family:var(--f-display);font-weight:600;color:var(--paper-ink)}
+.path:hover .go{color:#9a6c17}
 
-  /* CONTACT */
-  .contact-box{max-width:760px;margin:0 auto;text-align:center}
-  .contact-methods{display:flex;gap:18px;justify-content:center;flex-wrap:wrap;margin-top:36px}
-  .cm{background:linear-gradient(160deg,var(--panel),var(--bg2));border:1px solid var(--line);border-radius:14px;padding:22px 26px;min-width:210px;transition:.3s}
-  .cm:hover{border-color:var(--gold);transform:translateY(-4px)}
-  .cm .ic{font-size:1.5rem;margin-bottom:8px}
-  .cm .lbl{font-size:.7rem;letter-spacing:2px;color:var(--gold-bright);text-transform:uppercase;font-family:'Orbitron'}
-  .cm .val{margin-top:5px;font-size:.92rem}
+/* TEAM (light, continues) */
+.team-band{background:var(--paper);color:var(--paper-ink);padding-block:0 88px}
+.team{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:22px;margin-top:32px}
+.person{display:flex;flex-direction:column;gap:10px;min-width:0}
+.person .ph{aspect-ratio:4/5;max-width:100%;border-radius:12px;overflow:hidden;background:var(--paper-2)}
+.person img{width:100%;height:100%;object-fit:cover;object-position:50% 18%;display:block}
+.person h3{font-size:1.02rem}
+.person p{color:var(--paper-dim);font-size:.88rem;line-height:1.5}
 
-  footer{padding:50px 6vw 40px;text-align:center;border-top:1px solid var(--line);position:relative;z-index:2}
-  footer .fbrand{display:flex;align-items:center;justify-content:center;gap:12px;margin-bottom:14px}
-  footer .copy{color:var(--muted);font-size:.8rem}
-  footer .attr{color:var(--muted);font-size:.68rem;margin-top:10px;opacity:.7}
-  footer .attr a{color:var(--muted)}
+/* NETWORK strip */
+.network{background:var(--paper-2);color:var(--paper-ink);padding-block:40px}
+.network .inner{display:flex;flex-wrap:wrap;align-items:center;gap:14px 40px;justify-content:center}
+.network .label{width:100%;text-align:center;color:var(--paper-dim);margin-bottom:6px}
+.network span.org{font-family:var(--f-display);font-weight:600;font-size:1.05rem;color:#3c475d}
+.network a.org{display:flex;align-items:center;gap:10px;text-decoration:none}
+.network a.org img{height:40px;width:auto;background:#fff;border-radius:6px;padding:3px}
 
-  @media(max-width:860px){
-    .nav-links{display:none}
-    .menu-btn{display:block}
-    .about-grid{grid-template-columns:1fr;gap:36px}
-    .event{grid-template-columns:1fr;gap:18px;text-align:center}
-    .event-date{border-right:none;border-bottom:1px solid var(--line);padding-right:0;padding-bottom:18px}
-    .planet-scene{opacity:.45;right:-32vw}
-    .hero-overlay{background:linear-gradient(180deg,rgba(15,23,41,.55),var(--bg) 80%)}
-    .nav-links.open{display:flex;position:absolute;top:100%;left:0;right:0;flex-direction:column;background:rgba(15,23,41,.98);padding:24px;gap:20px;border-bottom:1px solid var(--line)}
-  }
+/* CONTACT + FOOTER */
+.contact{background:var(--navy);padding-block:88px}
+.contact .grid{display:grid;grid-template-columns:1fr 1fr;gap:48px}
+.contact h2{font-size:clamp(1.8rem,3.4vw,2.6rem);margin-top:10px}
+.contact .mono{color:var(--signal)}
+.contact .intro{color:var(--dim);margin-top:14px;max-width:32em}
+.contact dl{margin:0;display:grid;grid-template-columns:110px 1fr;gap:14px 18px;align-content:start}
+.contact dt{font-family:var(--f-mono);font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:var(--dim);padding-top:3px}
+.contact dd{margin:0;min-width:0;overflow-wrap:anywhere}
+.copy{margin-left:8px;font-family:var(--f-mono);font-size:.66rem;background:none;border:1px solid var(--line);color:var(--dim);border-radius:5px;padding:2px 7px;cursor:pointer}
+.copy:hover{color:var(--signal);border-color:var(--signal)}
+footer{background:var(--navy);border-top:1px solid var(--line);padding-block:36px 44px}
+footer .inner{display:flex;flex-wrap:wrap;justify-content:space-between;gap:24px}
+.missions{display:flex;gap:10px;flex-wrap:wrap}
+.missions a{text-decoration:none;border:1px solid var(--line);border-radius:8px;padding:8px 12px;font-size:.86rem;color:var(--dim)}
+.missions a[aria-current]{border-color:var(--signal);color:var(--ink)}
+.missions a:hover{color:var(--ink)}
+footer small{display:block;color:var(--dim);font-size:.76rem;margin-top:8px;line-height:1.6}
+
+@media (max-width:900px){
+  .links{display:none}
+  .links.open{display:flex;position:absolute;top:100%;left:0;right:0;flex-direction:column;align-items:flex-start;gap:16px;background:var(--void);border-bottom:1px solid var(--line);padding:20px max(16px,env(safe-area-inset-right,0px)) 24px max(16px,env(safe-area-inset-left,0px))}
+  .burger{display:block}
+  .news{grid-template-columns:1fr}
+  .paths{grid-template-columns:1fr}
+  .team{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .contact .grid{grid-template-columns:1fr;gap:32px}
+  .s-haps .split{grid-template-columns:1fr;min-height:0}
+  .s-haps .media{height:62vh}
+  .s-haps .media img{-webkit-mask-image:linear-gradient(transparent,#000 18%,#000 72%,transparent);mask-image:linear-gradient(transparent,#000 18%,#000 72%,transparent)}
+  .s-haps .textcol{justify-items:start;padding-block:8px 72px;padding-right:max(16px,env(safe-area-inset-right,0px))}
+  .scene{min-height:88vh}
+  .scene .inner{padding-block:96px 64px}
+  .scene.right .text{justify-self:start}
+  .s-ground::before,.s-orbit::before,.s-gulf::before{background:linear-gradient(var(--void),transparent 20%,rgba(7,11,22,.55) 55%,var(--void) 96%)}
+  .hero::before{background:linear-gradient(180deg,rgba(7,11,22,.55),rgba(7,11,22,.55) 40%,rgba(7,11,22,.85) 75%,var(--void))}
+  .hero img.bg{object-position:78% 50%}
+  .chev{display:none}
+}
+@media (max-width:520px){
+  .contact dl{grid-template-columns:1fr;gap:2px 0}
+  .contact dd{margin-bottom:12px}
+  .credit{max-width:90%}
+}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}.btn,.path{transition:none}}
 </style>
 </head>
-<body class="lang-th th">
-<div id="progress"></div>
-<canvas id="stars"></canvas>
+<body>
 
-<svg width="0" height="0" style="position:absolute">
-  <symbol id="atom" viewBox="0 0 100 100">
-    <g fill="none" stroke="#cfa769" stroke-width="2.2">
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="mark" viewBox="0 0 100 100">
+    <g fill="none" stroke="#e0b25e" stroke-width="2.4">
       <ellipse cx="50" cy="50" rx="40" ry="16" transform="rotate(30 50 50)"/>
       <ellipse cx="50" cy="50" rx="40" ry="16" transform="rotate(-30 50 50)"/>
     </g>
-    <circle cx="50" cy="50" r="7" fill="#cfa769"/>
-    <circle cx="84" cy="40" r="3" fill="#e6c489"/>
-    <circle cx="18" cy="62" r="2.4" fill="#cfa769"/>
+    <circle cx="50" cy="50" r="7" fill="#e0b25e"/>
+    <circle cx="84" cy="40" r="3" fill="#7ea9ff"/>
   </symbol>
 </svg>
 
-<div class="wrap">
-<!-- NAV -->
-<nav id="nav">
-  <div class="brand" onclick="document.getElementById('top').scrollIntoView()">
-    <svg class="logo-mark"><use href="#atom"/></svg>
-    <div class="brand-text">
-      <span class="t-th">อวกาศบางมด</span>
-      <span class="t-en">THONBURI SPACE INNOVATION HUB</span>
-    </div>
-  </div>
-  <div class="nav-links" id="navlinks">
-    <a href="#about"><span class="th-txt">เกี่ยวกับเรา</span><span class="en">About</span></a>
-    <a href="#services"><span class="th-txt">บริการหลัก</span><span class="en">Services</span></a>
-    <a href="#research"><span class="th-txt">งานวิจัย</span><span class="en">Research</span></a>
-    <a href="#invest"><span class="th-txt">ระบบนิเวศ</span><span class="en">Ecosystem</span></a>
-    <a href="#events"><span class="th-txt">กิจกรรม</span><span class="en">Events</span></a>
-    <a href="#contact"><span class="th-txt">ติดต่อ</span><span class="en">Contact</span></a>
-    <button class="lang-toggle" onclick="toggleLang()" id="langbtn">EN</button>
-  </div>
-  <button class="menu-btn" onclick="document.getElementById('navlinks').classList.toggle('open')">☰</button>
-</nav>
-
-<!-- HERO -->
-<header class="hero" id="top">
-  <div class="hero-bg"></div>
-  <div class="hero-overlay"></div>
-  <div class="planet-scene">
-    <div class="ring r3"></div>
-    <div class="ring r2"></div>
-    <div class="ring r1"></div>
-    <div class="planet-img"></div>
-    <div class="moon m1"></div>
-    <div class="moon m2"></div>
-    <div class="moon m3"></div>
-  </div>
-  <div class="hero-inner">
-    <div class="hero-logo-row">
-      <svg><use href="#atom"/></svg>
-      <span>THONBURI SPACE INNOVATION HUB</span>
-    </div>
-    <div class="badge"><span class="th-txt">เปิดตัวอย่างเป็นทางการ</span><span class="en">Officially Launched</span></div>
-    <h1><span class="th-txt">อวกาศ<br><span class="gold">บางมด</span></span><span class="en">Thonburi<br><span class="gold">Space</span></span></h1>
-    <div class="est">EST. 2025 · THONBURI · KMUTT</div>
-    <p class="tag">
-      <span class="th-txt">เสริมพลังผู้ประกอบการไทยสู่ระบบนิเวศอุตสาหกรรมอวกาศที่ยั่งยืน ผ่านองค์ความรู้ การวิจัย และนวัตกรรม</span>
-      <span class="en">Empowering Thai entrepreneurs toward a sustainable space-industry ecosystem — through knowledge, research, and innovation.</span>
-    </p>
-    <div class="hero-btns">
-      <a href="#services" class="btn btn-gold"><span class="th-txt">บริการของเรา</span><span class="en">Our Services</span></a>
-      <a href="#invest" class="btn btn-ghost"><span class="th-txt">ร่วมสร้างระบบนิเวศ</span><span class="en">Join the Ecosystem</span></a>
-    </div>
+<header class="nav gut">
+  <div class="inner">
+    <a class="brand" href="#top"><svg aria-hidden="true"><use href="#mark"/></svg><span><b data-th="อวกาศบางมด" data-en="Thonburi Space">อวกาศบางมด</b><small>THONBURI SPACE ECONOMY AND ENGINEERING INNOVATION CENTER</small></span></a>
+    <nav class="links" id="links" aria-label="Main">
+      <a href="#ascent" data-th="ภารกิจ" data-en="Missions">ภารกิจ</a>
+      <a href="haps.html">HAPS</a>
+      <a href="eo-cockpit.html">EO Cockpit</a>
+      <a href="#latest" data-th="ข่าว" data-en="News">ข่าว</a>
+      <a href="#paths" data-th="ร่วมงานกับเรา" data-en="Work with us">ร่วมงานกับเรา</a>
+      <a href="#team" data-th="ทีม" data-en="Team">ทีม</a>
+      <a href="#contact" data-th="ติดต่อ" data-en="Contact">ติดต่อ</a>
+      <a class="chip-btn" href="https://chirasil.github.io/CISS/" target="_blank" rel="noopener">CISS ↗</a>
+      <button class="chip-btn" id="langBtn" type="button" aria-label="Switch language">EN</button>
+    </nav>
+    <button class="chip-btn burger" id="burger" type="button" aria-expanded="false" aria-controls="links">MENU</button>
   </div>
 </header>
 
-<!-- ABOUT -->
-<section id="about">
-  <div class="sec-head reveal">
-    <div class="sec-tag">About Us</div>
-    <h2><span class="th-txt">เกี่ยวกับเรา</span><span class="en">Who We Are</span></h2>
+<main id="top">
+<!-- HERO -->
+<section class="hero gut">
+  <img class="bg" src="images/ts-hero-bangkok.jpg" alt="แสงไฟกรุงเทพฯ และอ่าวไทยยามค่ำคืน ถ่ายจากสถานีอวกาศนานาชาติ">
+  <div class="inner">
+    <div class="herocopy">
+      <div class="kicker mono"><i></i><span data-th="ภารกิจที่ 01 ของ CISS · มจธ." data-en="CISS Mission 01 · KMUTT">ภารกิจที่ 01 ของ CISS · มจธ.</span></div>
+      <h1 data-th="<span class='ln'>อวกาศที่ใช้งานได้จริง</span><span class='ln'>สำหรับ<em>ธุรกิจไทย</em></span>" data-en="<span class='ln'>Space that works</span><span class='ln'>for <em>Thai business</em></span>"><span class="ln">อวกาศที่ใช้งานได้จริง</span><span class="ln">สำหรับ<em>ธุรกิจไทย</em></span></h1>
+      <p class="lede" data-th="อวกาศบางมดเชื่อมงานวิจัยของ มจธ. เข้ากับผู้ประกอบการ ตั้งแต่การสื่อสารผ่านดาวเทียม สถานีสื่อสารบนชั้นบรรยากาศสูง ไปจนถึงดาวเทียมขนาดเล็ก ล่าสุดเราได้รับทุน บพข. พัฒนา HAPS ต้นแบบสัญชาติไทย" data-en="Thonburi Space links KMUTT research with Thai companies, from satellite communications and high-altitude platforms to small satellites. Our latest project: a Thai-built HAPS prototype funded by PMUC.">อวกาศบางมดเชื่อมงานวิจัยของ มจธ. เข้ากับผู้ประกอบการ ตั้งแต่การสื่อสารผ่านดาวเทียม สถานีสื่อสารบนชั้นบรรยากาศสูง ไปจนถึงดาวเทียมขนาดเล็ก ล่าสุดเราได้รับทุน บพข. พัฒนา HAPS ต้นแบบสัญชาติไทย</p>
+      <a class="textlink" href="#ascent" data-th="ดูว่าเราทำอะไร ↓" data-en="See what we do ↓">ดูว่าเราทำอะไร ↓</a>
+    </div>
   </div>
-  <div class="about-grid">
-    <div class="about-text reveal">
-      <h3><span class="th-txt">ศูนย์กลางนวัตกรรมอวกาศเพื่อผู้ประกอบการไทย</span><span class="en">A Space Innovation Hub for Thai Entrepreneurs</span></h3>
-      <p>
-        <span class="th-txt">"อวกาศบางมด" (Thonburi Space Innovation Hub) มุ่งเสริมสร้างศักยภาพผู้ประกอบการไทยในการเข้าถึง พัฒนา และใช้ประโยชน์จากเทคโนโลยีอวกาศอย่างเป็นระบบ ผ่านองค์ความรู้ การวิจัย และนวัตกรรม</span>
-        <span class="en">Thonburi Space Innovation Hub empowers Thai entrepreneurs to access, develop, and leverage space technology systematically — through knowledge, research, and innovation.</span>
-      </p>
-      <p>
-        <span class="th-txt">เราเป็นสะพานเชื่อมระหว่างมหาวิทยาลัย (มจธ.) ภาคธุรกิจ ภาครัฐ และนักลงทุน เพื่อร่วมกันสร้างระบบนิเวศอุตสาหกรรมอวกาศของไทยให้เติบโตอย่างยั่งยืน</span>
-        <span class="en">We bridge the university (KMUTT), industry, government, and investors — building a sustainable Thai space-industry ecosystem together.</span>
-      </p>
-      <div class="stats">
-        <div class="stat"><div class="num">2025</div><div class="lbl"><span class="th-txt">ปีก่อตั้ง</span><span class="en">Established</span></div></div>
-        <div class="stat"><div class="num" data-count="1284" data-suffix="+">0</div><div class="lbl"><span class="th-txt">ผู้ติดตามชุมชน</span><span class="en">Community Followers</span></div></div>
-        <div class="stat"><div class="num" data-count="4">0</div><div class="lbl"><span class="th-txt">บริการหลัก</span><span class="en">Core Services</span></div></div>
-        <div class="stat"><div class="num">KMUTT</div><div class="lbl"><span class="th-txt">สังกัด มจธ.</span><span class="en">Affiliated</span></div></div>
+  <div class="chev" aria-hidden="true"><span></span><span></span><span></span></div>
+  <p class="credit" data-th="ภาพ: กรุงเทพฯ ยามค่ำ จากสถานีอวกาศนานาชาติ 26 ก.พ. 2564 · NASA (iss064e037842)" data-en="Photo: Bangkok at night from the ISS, 26 Feb 2021 · NASA (iss064e037842)">ภาพ: กรุงเทพฯ ยามค่ำ จากสถานีอวกาศนานาชาติ 26 ก.พ. 2564 · NASA (iss064e037842)</p>
+</section>
+
+<!-- LATEST -->
+<section class="latest gut" id="latest">
+  <div class="inner">
+    <div class="sec-head"><h2 data-th="ความเคลื่อนไหวล่าสุด" data-en="Latest">ความเคลื่อนไหวล่าสุด</h2><span class="mono">2568–2569</span></div>
+    <div class="news">
+      <article class="lead">
+        <span class="tag" data-th="ทุนวิจัย" data-en="Grant">ทุนวิจัย</span>
+        <time datetime="2026-06-06" data-th="6 มิ.ย. 2569" data-en="6 Jun 2026">6 มิ.ย. 2569</time>
+        <h3 data-th="ได้รับทุน บพข. พัฒนา HAPS ต้นแบบสัญชาติไทย" data-en="PMUC funds a Thai-built HAPS prototype">ได้รับทุน บพข. พัฒนา HAPS ต้นแบบสัญชาติไทย</h3>
+        <p data-th="CISS ร่วมกับภาควิชาวิศวกรรมเครื่องกล ภาควิชาวิศวกรรมอิเล็กทรอนิกส์และโทรคมนาคม มจธ. และบริษัท เอแอลที เทเลคอม จำกัด (มหาชน)" data-en="CISS with KMUTT's Mechanical and Electronic and Telecommunication Engineering departments and ALT Telecom.">CISS ร่วมกับภาควิชาวิศวกรรมเครื่องกล ภาควิชาวิศวกรรมอิเล็กทรอนิกส์และโทรคมนาคม มจธ. และบริษัท เอแอลที เทเลคอม จำกัด (มหาชน)</p>
+      </article>
+      <article>
+        <span class="tag" data-th="เปิดตัว" data-en="Launch">เปิดตัว</span>
+        <time datetime="2026-05-12" data-th="12 พ.ค. 2569" data-en="12 May 2026">12 พ.ค. 2569</time>
+        <h3 data-th="นำเสนออวกาศบางมดต่อผู้บริหาร มจธ." data-en="Thonburi Space presented to KMUTT leadership">นำเสนออวกาศบางมดต่อผู้บริหาร มจธ.</h3>
+        <p data-th="เปิดตัวทีมงานด้านอวกาศเพื่อขับเคลื่อนงานวิจัยดาวเทียมขนาดเล็กและเศรษฐกิจอวกาศ" data-en="The space team was introduced to drive small-satellite research and the space economy.">เปิดตัวทีมงานด้านอวกาศเพื่อขับเคลื่อนงานวิจัยดาวเทียมขนาดเล็กและเศรษฐกิจอวกาศ</p>
+      </article>
+      <article>
+        <span class="tag">Workshop</span>
+        <time datetime="2025-07-18" data-th="18 ก.ค. 2568" data-en="18 Jul 2025">18 ก.ค. 2568</time>
+        <h3 data-th="เปิดประตูสู่อุตสาหกรรมอวกาศ" data-en="Opening the door to the space industry">เปิดประตูสู่อุตสาหกรรมอวกาศ</h3>
+        <p data-th="เวิร์กช็อปพบผู้เชี่ยวชาญและเครือข่ายภาครัฐ–เอกชน ที่ มจธ. บางมด" data-en="A workshop with experts and the public–private network at KMUTT Bang Mod.">เวิร์กช็อปพบผู้เชี่ยวชาญและเครือข่ายภาครัฐ–เอกชน ที่ มจธ. บางมด</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- INTERSTITIAL -->
+<section class="inter gut" id="ascent">
+  <canvas id="stars" aria-hidden="true"></canvas>
+  <div class="inner">
+    <span class="mono" style="color:var(--signal)" data-th="สี่ระดับของงานเรา" data-en="Four altitudes of our work">สี่ระดับของงานเรา</span>
+    <h2 style="margin-top:12px" data-th="จากพื้นดินที่บางมด ขึ้นสู่วงโคจร แล้วกลับลงมาเป็นประโยชน์" data-en="From the ground at Bang Mod, up to orbit, and back down as value">จากพื้นดินที่บางมด ขึ้นสู่วงโคจร แล้วกลับลงมาเป็นประโยชน์</h2>
+    <p data-th="งานของศูนย์เรียงตามระดับความสูง แต่ละระดับมีทีมและโครงการของตัวเอง" data-en="Our work is arranged by altitude. Each level has its own team and projects.">งานของศูนย์เรียงตามระดับความสูง แต่ละระดับมีทีมและโครงการของตัวเอง</p>
+    <nav class="altitude" aria-label="Altitudes">
+      <a href="#ground"><span>0 KM</span><b data-th="ภาคพื้นดิน" data-en="Ground">ภาคพื้นดิน</b></a>
+      <a href="#haps"><span>~20 KM</span><b data-th="ชั้นบรรยากาศสูง" data-en="Stratosphere">ชั้นบรรยากาศสูง</b></a>
+      <a href="#orbit"><span>LEO</span><b data-th="วงโคจร" data-en="Orbit">วงโคจร</b></a>
+      <a href="#value"><span>↓</span><b data-th="กลับสู่ธุรกิจไทย" data-en="Back to Thai business">กลับสู่ธุรกิจไทย</b></a>
+    </nav>
+  </div>
+</section>
+
+<!-- SCENE 1: GROUND -->
+<section class="scene right s-ground gut" id="ground">
+  <img class="bg" src="images/ts-ground-dish.jpg" alt="" loading="lazy">
+  <div class="inner">
+    <div class="text">
+      <span class="mono alt" data-th="0 กม. · ภาคพื้นดิน" data-en="0 km · Ground">0 กม. · ภาคพื้นดิน</span>
+      <h2 data-th="สื่อสารดาวเทียม<br>และคลื่นความถี่" data-en="Satellite links<br>and spectrum">สื่อสารดาวเทียม<br>และคลื่นความถี่</h2>
+      <p data-th="ดาวเทียมจะมีประโยชน์ก็ต่อเมื่อสื่อสารกับพื้นดินได้ ทีมจากภาควิชาวิศวกรรมอิเล็กทรอนิกส์และโทรคมนาคม มจธ. วิจัยการสื่อสารผ่านดาวเทียม การใช้คลื่นความถี่ร่วมกันระหว่างดาวเทียมกับ 5G และโครงข่าย 6G แบบอวกาศ–อากาศ–ภาคพื้นดิน" data-en="A satellite is only useful if it can talk to the ground. Our team in KMUTT's Electronic and Telecommunication Engineering department researches satellite links, spectrum sharing between satellites and 5G, and 6G space–air–ground networks.">ดาวเทียมจะมีประโยชน์ก็ต่อเมื่อสื่อสารกับพื้นดินได้ ทีมจากภาควิชาวิศวกรรมอิเล็กทรอนิกส์และโทรคมนาคม มจธ. วิจัยการสื่อสารผ่านดาวเทียม การใช้คลื่นความถี่ร่วมกันระหว่างดาวเทียมกับ 5G และโครงข่าย 6G แบบอวกาศ–อากาศ–ภาคพื้นดิน</p>
+      <div class="proof"><span>KMUTT BANG MOD</span><span><b>13.65°N</b> · <b>100.49°E</b></span></div>
+      <a class="btn ghost" href="https://chirasil.github.io/CISS/digital" target="_blank" rel="noopener" data-th="ดูงานด้านการสื่อสาร ↗" data-en="See our communications work ↗">ดูงานด้านการสื่อสาร ↗</a>
+    </div>
+  </div>
+  <p class="credit" data-th="ภาพประกอบ: จานสายอากาศ DSS-15 ขนาด 34 ม. ที่ Goldstone สหรัฐฯ · NASA/JPL-Caltech (PIA26717)" data-en="Illustration: 34 m DSS-15 antenna at Goldstone, USA · NASA/JPL-Caltech (PIA26717)">ภาพประกอบ: จานสายอากาศ DSS-15 ขนาด 34 ม. ที่ Goldstone สหรัฐฯ · NASA/JPL-Caltech (PIA26717)</p>
+</section>
+
+<!-- SCENE 2: HAPS (split) -->
+<section class="scene s-haps" id="haps">
+  <div class="split">
+    <div class="textcol">
+      <div class="text" style="display:grid;gap:16px">
+        <span class="mono alt" data-th="~20 กม. · ชั้นสตราโตสเฟียร์" data-en="~20 km · Stratosphere">~20 กม. · ชั้นสตราโตสเฟียร์</span>
+        <h2 data-th="HAPS ต้นแบบ<br>สัญชาติไทย" data-en="A Thai-built<br>HAPS prototype">HAPS ต้นแบบ<br>สัญชาติไทย</h2>
+        <p data-th="สถานีสื่อสารบนชั้นบรรยากาศสูง (High Altitude Platform Station) ลอยอยู่เหนือเส้นทางการบินพาณิชย์ ทำหน้าที่เหมือนเสาสัญญาณบนฟ้าที่ให้บริการพื้นที่กว้าง โครงการนี้ได้รับทุนจาก บพข. และพัฒนาร่วมกับบริษัท เอแอลที เทเลคอม จำกัด (มหาชน)" data-en="A High Altitude Platform Station flies above commercial air traffic and works like a cell tower in the sky, covering a wide area. The project is funded by PMUC and developed with ALT Telecom.">สถานีสื่อสารบนชั้นบรรยากาศสูง (High Altitude Platform Station) ลอยอยู่เหนือเส้นทางการบินพาณิชย์ ทำหน้าที่เหมือนเสาสัญญาณบนฟ้าที่ให้บริการพื้นที่กว้าง โครงการนี้ได้รับทุนจาก บพข. และพัฒนาร่วมกับบริษัท เอแอลที เทเลคอม จำกัด (มหาชน)</p>
+        <div class="proof"><span data-th="ทุน <b>บพข. 2569</b>" data-en="Grant <b>PMUC 2026</b>">ทุน <b>บพข. 2569</b></span><span data-th="พันธมิตร <b>ALT Telecom</b>" data-en="Partner <b>ALT Telecom</b>">พันธมิตร <b>ALT Telecom</b></span></div>
+        <div style="display:flex;gap:12px;flex-wrap:wrap">
+          <a class="btn" href="haps.html" data-th="รู้จัก HAPS ให้มากขึ้น →" data-en="Learn more about HAPS →">รู้จัก HAPS ให้มากขึ้น →</a>
+          <a class="btn ghost" href="https://chirasil.github.io/CISS/data/HAPSfornontech_en.pdf" target="_blank" rel="noopener" data-th="ฉบับเข้าใจง่าย (PDF) ↗" data-en="Plain-language PDF ↗">ฉบับเข้าใจง่าย (PDF) ↗</a>
+        </div>
       </div>
     </div>
-    <div class="about-visual reveal">
-      <img class="about-photo" src="https://images.unsplash.com/photo-1614728263952-84ea256f9679?q=80&w=800" alt="Space">
-      <svg class="about-orbit"><use href="#atom"/></svg>
+    <div class="media">
+      <img src="images/ts-helios.jpg" alt="" loading="lazy">
+      <p class="credit" data-th="ภาพประกอบ: อากาศยานต้นแบบ Helios ของ NASA บินเหนือเกาะคาไว ปี 2546 · NASA (ED03-0152-32)" data-en="Illustration: NASA's Helios prototype over Kauai, 2003 · NASA (ED03-0152-32)">ภาพประกอบ: อากาศยานต้นแบบ Helios ของ NASA บินเหนือเกาะคาไว ปี 2546 · NASA (ED03-0152-32)</p>
     </div>
   </div>
 </section>
 
-<!-- SERVICES -->
-<section id="services">
-  <div class="sec-head reveal">
-    <div class="sec-tag">Core Services</div>
-    <h2><span class="th-txt">บริการหลัก</span><span class="en">What We Offer</span></h2>
-    <p><span class="th-txt">บริการที่เชื่อมงานวิชาการเข้ากับโอกาสจริงของผู้ประกอบการ</span><span class="en">Services connecting academic strength to real entrepreneurial opportunity.</span></p>
-  </div>
-  <div class="grid">
-    <div class="card reveal">
-      <div class="icon">🧭</div><span class="cat">Consulting</span>
-      <h3><span class="th-txt">ที่ปรึกษานวัตกรรมอวกาศเชิงกลยุทธ์</span><span class="en">Strategic Space Innovation Consulting</span></h3>
-      <p><span class="th-txt">ให้คำปรึกษาเชิงกลยุทธ์แก่ธุรกิจและองค์กรที่ต้องการเข้าสู่หรือต่อยอดในอุตสาหกรรมอวกาศ</span><span class="en">Strategic guidance for businesses and organizations entering or scaling in the space industry.</span></p>
-    </div>
-    <div class="card reveal">
-      <div class="icon">🔬</div><span class="cat">Research</span>
-      <h3><span class="th-txt">งานวิจัยเชิงวิชาการ</span><span class="en">Academic Research</span></h3>
-      <p><span class="th-txt">งานวิจัยขั้นแนวหน้าด้านเทคโนโลยีอวกาศ ที่นำไปประยุกต์ใช้และต่อยอดเชิงพาณิชย์ได้จริง</span><span class="en">Frontier space-technology research with real applied and commercial potential.</span></p>
-    </div>
-    <div class="card reveal">
-      <div class="icon">🎓</div><span class="cat">Academic</span>
-      <h3><span class="th-txt">บริการวิชาการมืออาชีพ</span><span class="en">Professional Academic Services</span></h3>
-      <p><span class="th-txt">อบรม เวิร์กช็อป และบริการวิชาการโดยผู้เชี่ยวชาญ เพื่อพัฒนาบุคลากรและองค์กร</span><span class="en">Expert-led training, workshops, and academic services to upskill people and organizations.</span></p>
-    </div>
-    <div class="card reveal">
-      <div class="icon">🛰️</div><span class="cat">Policy</span>
-      <h3><span class="th-txt">นโยบายอวกาศ</span><span class="en">Space Policy</span></h3>
-      <p><span class="th-txt">วิเคราะห์และให้ข้อเสนอเชิงนโยบาย เพื่อสนับสนุนการเติบโตของอุตสาหกรรมอวกาศไทย</span><span class="en">Policy analysis and recommendations to support the growth of Thailand's space industry.</span></p>
+<!-- SCENE 3: ORBIT -->
+<section class="scene s-orbit gut" id="orbit">
+  <img class="bg" src="images/ts-orbit.jpg" alt="" loading="lazy">
+  <div class="inner">
+    <div class="text">
+      <span class="mono alt" data-th="วงโคจรต่ำ · LEO" data-en="Low Earth orbit · LEO">วงโคจรต่ำ · LEO</span>
+      <h2 data-th="ดาวเทียมขนาดเล็ก<br>และระบบควบคุมทิศทาง" data-en="Small satellites<br>and attitude control">ดาวเทียมขนาดเล็ก<br>และระบบควบคุมทิศทาง</h2>
+      <p data-th="ดาวเทียมขนาดเล็กต้องชี้กล้องและสายอากาศได้แม่นยำ และต้องมีพลังงานพอตลอดภารกิจ ทีมของเราทำงานด้านระบบควบคุมทิศทาง (ADCS) นำโดย ดร.จิรวิทย์ ปราถน์วิทยา และด้านพลังงานในอวกาศที่ Astronergy Lab นำโดย ผศ.ดร.จักรภพ วงศ์วิวัฒน์" data-en="A small satellite has to point its camera and antennas precisely and keep enough power for the whole mission. Our team works on attitude determination and control (ADCS), led by Dr. Jiravit Pratvittaya, and on space power at the Astronergy Lab, led by Asst. Prof. Dr. Jakrapop Wongwiwat.">ดาวเทียมขนาดเล็กต้องชี้กล้องและสายอากาศได้แม่นยำ และต้องมีพลังงานพอตลอดภารกิจ ทีมของเราทำงานด้านระบบควบคุมทิศทาง (ADCS) นำโดย ดร.จิรวิทย์ ปราถน์วิทยา และด้านพลังงานในอวกาศที่ Astronergy Lab นำโดย ผศ.ดร.จักรภพ วงศ์วิวัฒน์</p>
+      <div class="proof"><span>ADCS</span><span>SPACE POWER</span><span>IG <b>@astronergylab</b></span></div>
+      <a class="btn ghost" href="https://www.instagram.com/astronergylab" target="_blank" rel="noopener" data-th="ติดตาม Astronergy Lab ↗" data-en="Follow Astronergy Lab ↗">ติดตาม Astronergy Lab ↗</a>
     </div>
   </div>
+  <p class="credit" data-th="ภาพประกอบ: CubeSat สามดวงที่นักศึกษาทั่วโลกออกแบบ ถูกปล่อยจากสถานีอวกาศนานาชาติ 3 ก.พ. 2569 · NASA (iss074e0301636)" data-en="Illustration: three student-built CubeSats deployed from the ISS, 3 Feb 2026 · NASA (iss074e0301636)">ภาพประกอบ: CubeSat สามดวงที่นักศึกษาทั่วโลกออกแบบ ถูกปล่อยจากสถานีอวกาศนานาชาติ 3 ก.พ. 2569 · NASA (iss074e0301636)</p>
 </section>
 
-<!-- RESEARCH -->
-<section id="research">
-  <div class="sec-head reveal">
-    <div class="sec-tag">Research & Projects</div>
-    <h2><span class="th-txt">งานวิจัยและโครงการ</span><span class="en">Research & Projects</span></h2>
-    <p><span class="th-txt">ตัวอย่างขอบเขตงานวิจัยที่กลุ่มดำเนินการ (แก้ไขเนื้อหาได้ตามจริง)</span><span class="en">Examples of our research scope (placeholder content — editable).</span></p>
-  </div>
-  <div class="grid">
-    <div class="card reveal">
-      <div class="card-img" style="background-image:url('https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?q=80&w=800')"></div>
-      <span class="cat">Satellite</span>
-      <h3><span class="th-txt">ดาวเทียมขนาดเล็ก CubeSat</span><span class="en">CubeSat Development</span></h3>
-      <p><span class="th-txt">ออกแบบและพัฒนาดาวเทียมขนาดเล็กสำหรับการสำรวจและการศึกษาในวงโคจรต่ำ</span><span class="en">Small satellites for remote sensing and low-Earth-orbit studies.</span></p>
-    </div>
-    <div class="card reveal">
-      <div class="card-img" style="background-image:url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=800')"></div>
-      <span class="cat">Data & AI</span>
-      <h3><span class="th-txt">วิเคราะห์ข้อมูลภาพถ่ายดาวเทียม</span><span class="en">Earth Observation Analytics</span></h3>
-      <p><span class="th-txt">ประยุกต์ AI วิเคราะห์ภาพถ่ายดาวเทียมเพื่อการเกษตร เมือง และสิ่งแวดล้อม</span><span class="en">AI-driven satellite imagery analysis for agriculture, cities, and the environment.</span></p>
-    </div>
-    <div class="card reveal">
-      <div class="card-img" style="background-image:url('https://images.unsplash.com/photo-1419242902214-272b3f66ee7a?q=80&w=800')"></div>
-      <span class="cat">Communication</span>
-      <h3><span class="th-txt">ระบบสื่อสารผ่านดาวเทียม</span><span class="en">Satellite Communications</span></h3>
-      <p><span class="th-txt">วิจัยสายอากาศและโปรโตคอลสื่อสารประสิทธิภาพสูงสำหรับภาคพื้นดินและอวกาศ</span><span class="en">High-performance antennas and protocols for ground and space segments.</span></p>
-    </div>
-    <div class="card reveal" style="text-align:center">
-      <div class="qr-crop"><img src="images/astronergy.jpg" alt="Astronergy Lab Instagram QR"></div>
-      <span class="cat">Research Lab</span>
-      <h3>Astronergy Lab</h3>
-      <p><span class="th-txt">ห้องปฏิบัติการวิจัยด้านพลังงานและเทคโนโลยีอวกาศ นำโดย ผศ.ดร.จักรภพ วงศ์วิวัฒน์ ติดตามผลงานและกิจกรรมได้ทาง Instagram</span><span class="en">A research lab in space energy and technology, led by Asst.Prof. Jakrapop Wongwiwat. Follow our work and activities on Instagram.</span></p>
-      <a class="ig-link" href="https://www.instagram.com/astronergylab" target="_blank" rel="noopener">📷 @astronergylab</a>
+<!-- SCENE 4: BACK TO EARTH -->
+<section class="scene right s-gulf gut" id="value">
+  <img class="bg" src="images/ts-gulf.jpg" alt="" loading="lazy">
+  <div class="inner">
+    <div class="text">
+      <span class="mono alt" data-th="กลับสู่พื้นโลก" data-en="Back to Earth">กลับสู่พื้นโลก</span>
+      <h2 data-th="ประโยชน์ที่กลับลงมา<br>ถึงธุรกิจไทย" data-en="Value that comes back<br>down to Thai business">ประโยชน์ที่กลับลงมา<br>ถึงธุรกิจไทย</h2>
+      <p data-th="ข้อมูลและบริการจากอวกาศมีค่าเมื่อธุรกิจนำไปใช้ได้จริง เราให้คำปรึกษาเชิงกลยุทธ์ อบรมทีมงาน และจัดทำข้อเสนอเชิงนโยบาย เพื่อให้ผู้ประกอบการไทยเข้าสู่อุตสาหกรรมอวกาศได้อย่างมีระบบ" data-en="Space data and services only matter when businesses can use them. We provide strategic advice, team training and policy work so Thai companies can enter the space industry with a plan.">ข้อมูลและบริการจากอวกาศมีค่าเมื่อธุรกิจนำไปใช้ได้จริง เราให้คำปรึกษาเชิงกลยุทธ์ อบรมทีมงาน และจัดทำข้อเสนอเชิงนโยบาย เพื่อให้ผู้ประกอบการไทยเข้าสู่อุตสาหกรรมอวกาศได้อย่างมีระบบ</p>
+      <div class="proof"><span data-th="<b>ที่ปรึกษา</b>" data-en="<b>Consulting</b>">ที่ปรึกษา</span><span data-th="<b>อบรม</b>" data-en="<b>Training</b>">อบรม</span><span data-th="<b>นโยบายอวกาศ</b>" data-en="<b>Space policy</b>">นโยบายอวกาศ</span></div>
+      <a class="btn" href="#paths" data-th="เริ่มจากโจทย์ของคุณ" data-en="Start with your problem">เริ่มจากโจทย์ของคุณ</a>
     </div>
   </div>
+  <p class="credit" data-th="ภาพ: แสงไฟเรือประมงในอ่าวไทย จากสถานีอวกาศนานาชาติ 21 เม.ย. 2569 · NASA (iss074e0536946)" data-en="Photo: fishing-boat lights in the Gulf of Thailand from the ISS, 21 Apr 2026 · NASA (iss074e0536946)">ภาพ: แสงไฟเรือประมงในอ่าวไทย จากสถานีอวกาศนานาชาติ 21 เม.ย. 2569 · NASA (iss074e0536946)</p>
 </section>
 
-<!-- ECOSYSTEM / INVESTOR -->
-<section id="invest" class="investor">
-  <div class="invest-box reveal">
-    <div class="sec-tag">For Partners & Investors</div>
-    <h2 style="margin-top:14px"><span class="th-txt">ร่วมสร้างระบบนิเวศอวกาศไทย</span><span class="en">Build Thailand's Space Ecosystem</span></h2>
-    <p>
-      <span class="th-txt">เราเปิดรับพันธมิตร นักลงทุน และผู้ประกอบการที่ต้องการร่วมขับเคลื่อนอุตสาหกรรมอวกาศของไทยให้เติบโตอย่างยั่งยืน ไม่ว่าจะเป็นการร่วมวิจัย การถ่ายทอดเทคโนโลยี หรือการต่อยอดสู่ธุรกิจ</span>
-      <span class="en">We welcome partners, investors, and entrepreneurs to sustainably grow Thailand's space industry — through joint research, technology transfer, and venture building.</span>
-    </p>
-    <div class="invest-points">
-      <div class="ip"><div class="ic">🚀</div><h4><span class="th-txt">ผู้ประกอบการ</span><span class="en">Entrepreneurs</span></h4><p><span class="th-txt">เข้าถึงองค์ความรู้ ที่ปรึกษา และเครือข่ายเพื่อเริ่มต้นธุรกิจอวกาศ</span><span class="en">Access knowledge, mentorship, and networks to launch a space venture.</span></p></div>
-      <div class="ip"><div class="ic">💼</div><h4><span class="th-txt">นักลงทุน</span><span class="en">Investors</span></h4><p><span class="th-txt">ค้นพบโอกาสในตลาดอวกาศที่กำลังเติบโตในภูมิภาคอาเซียน</span><span class="en">Discover opportunities in ASEAN's growing space market.</span></p></div>
-      <div class="ip"><div class="ic">🏛️</div><h4><span class="th-txt">ภาครัฐ–เอกชน</span><span class="en">Public & Private</span></h4><p><span class="th-txt">ความร่วมมือเชิงนโยบายและวิชาการเพื่อยกระดับอุตสาหกรรม</span><span class="en">Policy and academic collaboration to elevate the industry.</span></p></div>
-    </div>
-    <div style="margin-top:42px;position:relative">
-      <a href="#contact" class="btn btn-gold"><span class="th-txt">เริ่มต้นพูดคุย</span><span class="en">Start a Conversation</span></a>
-    </div>
-  </div>
-</section>
-
-<!-- EVENTS -->
-<section id="events">
-  <div class="sec-head reveal">
-    <div class="sec-tag">Events & Activities</div>
-    <h2><span class="th-txt">กิจกรรม</span><span class="en">Events</span></h2>
-    <p><span class="th-txt">กิจกรรมและเวิร์กช็อปที่กำลังจะเกิดขึ้น</span><span class="en">Upcoming activities and workshops.</span></p>
-  </div>
-  <div class="event reveal">
-    <div class="event-date">
-      <div class="d">18</div>
-      <div class="m"><span class="th-txt">ก.ค.</span><span class="en">JUL</span></div>
-      <div class="y"><span class="th-txt">2568</span><span class="en">2025</span></div>
-    </div>
-    <div class="event-info">
-      <div class="etag">Workshop · <span class="th-txt">กิจกรรม</span><span class="en">Activity</span></div>
-      <h3><span class="th-txt">เปิดประตูสู่อุตสาหกรรมอวกาศ</span><span class="en">Opening the Door to the Space Industry</span></h3>
-      <div class="meta">
-        <span>🕜 13:00–16:30 <span class="th-txt">น.</span></span>
-        <span>📍 <span class="th-txt">มจธ. บางมด</span><span class="en">KMUTT, Bang Mod</span></span>
-      </div>
-      <p style="color:var(--muted);font-size:.92rem"><span class="th-txt">พบกับผู้เชี่ยวชาญและเครือข่ายภาครัฐ–เอกชน · รับจำนวนจำกัด</span><span class="en">Meet experts and the public–private network · Limited seats.</span></p>
-      <div style="margin-top:18px"><a href="#contact" class="btn btn-ghost" style="padding:10px 24px;font-size:.85rem"><span class="th-txt">สมัครเข้าร่วม</span><span class="en">Register</span></a></div>
-    </div>
-  </div>
-</section>
-
-<!-- TEAM -->
-<section id="team">
-  <div class="sec-head reveal">
-    <div class="sec-tag">Our People</div>
-    <h2><span class="th-txt">ทีมงาน</span><span class="en">Our Team</span></h2>
-    <p><span class="th-txt">ผู้เชี่ยวชาญและนักวิจัยหลัก</span><span class="en">Key specialists and researchers.</span></p>
-  </div>
-  <div class="team-grid">
-    <div class="member reveal"><div class="avatar" id="ph-1">จ</div><h4><span class="th-txt">ผศ.ดร.จิรศิลป์ จยาวรรณ</span><span class="en">Asst.Prof. Chirasil Chayawan, Ph.D.</span></h4><div class="role">Team Lead and Head of CISS Excellent Center</div></div>
-    <div class="member reveal"><div class="avatar" id="ph-2">จ</div><h4><span class="th-txt">ผศ.ดร.จักรภพ วงศ์วิวัฒน์</span><span class="en">Asst.Prof. Jakrapop Wongwiwat, Ph.D.</span></h4><div class="role">Head of Astronergy Lab</div></div>
-    <div class="member reveal"><div class="avatar" id="ph-3">ว</div><h4><span class="th-txt">ดร.วทัญญู สุขเสงี่ยม</span><span class="en">Watanyoo Suksa-ngiam, Ph.D.</span></h4><div class="role">Space Policy Expert</div></div>
-    <div class="member reveal"><div class="avatar" id="ph-4">จ</div><h4><span class="th-txt">ดร.จิรวิทย์ ปราถน์วิทยา</span><span class="en">Jiravit Pratvittaya, Ph.D.</span></h4><div class="role">ADCS Expert</div></div>
-    <div class="member reveal">
-      <a href="https://sta-website.vercel.app" target="_blank" rel="noopener" style="text-decoration:none;color:inherit;display:block">
-        <div class="avatar" style="background:#fff"><img src="images/sta.png" alt="STA Club" style="object-fit:contain;padding:10px"></div>
-        <h4><span class="th-txt">ชมรมเทคโนโลยีอวกาศและดาราศาสตร์</span><span class="en">Space Technology and Astronomy Club</span></h4>
-        <div class="role">🔗 STA Club</div>
+<!-- PATHS -->
+<section class="light gut" id="paths">
+  <div class="inner">
+    <span class="mono" data-th="ร่วมงานกับเรา" data-en="Work with us">ร่วมงานกับเรา</span>
+    <h2 style="font-size:clamp(1.8rem,3.4vw,2.6rem);margin-top:10px" data-th="คุณมาที่นี่ในฐานะใคร" data-en="Who are you coming to us as?">คุณมาที่นี่ในฐานะใคร</h2>
+    <p class="intro" data-th="แต่ละกลุ่มเข้ามาด้วยโจทย์ต่างกัน เราจึงแยกเส้นทางให้ชัดตั้งแต่แรก" data-en="Each group comes with a different question, so each has its own way in.">แต่ละกลุ่มเข้ามาด้วยโจทย์ต่างกัน เราจึงแยกเส้นทางให้ชัดตั้งแต่แรก</p>
+    <div class="paths">
+      <a class="path" href="#contact">
+        <span class="mono" data-th="ผู้ประกอบการ" data-en="Entrepreneurs">ผู้ประกอบการ</span>
+        <h3 data-th="อยากใช้เทคโนโลยีอวกาศในธุรกิจ" data-en="You want space technology in your business">อยากใช้เทคโนโลยีอวกาศในธุรกิจ</h3>
+        <ul>
+          <li data-th="ประเมินว่าโจทย์ใช้ข้อมูลหรือระบบอวกาศได้ตรงไหน" data-en="Find where space data or systems fit">ประเมินว่าโจทย์ใช้ข้อมูลหรือระบบอวกาศได้ตรงไหน</li>
+          <li data-th="ที่ปรึกษาเชิงกลยุทธ์และเครือข่ายผู้เชี่ยวชาญ" data-en="Strategic advice and an expert network">ที่ปรึกษาเชิงกลยุทธ์และเครือข่ายผู้เชี่ยวชาญ</li>
+          <li data-th="อบรมทีมงานโดยอาจารย์และนักวิจัย มจธ." data-en="Training for your team by KMUTT faculty">อบรมทีมงานโดยอาจารย์และนักวิจัย มจธ.</li>
+        </ul>
+        <span class="go" data-th="นัดคุยโจทย์ →" data-en="Book a first conversation →">นัดคุยโจทย์ →</span>
+      </a>
+      <a class="path" href="#contact">
+        <span class="mono" data-th="พันธมิตรและนักลงทุน" data-en="Partners & investors">พันธมิตรและนักลงทุน</span>
+        <h3 data-th="อยากร่วมสร้างอุตสาหกรรมอวกาศไทย" data-en="You want to help build Thailand's space industry">อยากร่วมสร้างอุตสาหกรรมอวกาศไทย</h3>
+        <ul>
+          <li data-th="ร่วมวิจัยและพัฒนาต้นแบบในรูปแบบทุนร่วม" data-en="Co-funded research and prototypes">ร่วมวิจัยและพัฒนาต้นแบบในรูปแบบทุนร่วม</li>
+          <li data-th="ถ่ายทอดเทคโนโลยีจากงานวิจัยสู่ภาคเอกชน" data-en="Technology transfer from our labs">ถ่ายทอดเทคโนโลยีจากงานวิจัยสู่ภาคเอกชน</li>
+          <li data-th="มองหาโอกาสในตลาดอวกาศอาเซียน" data-en="Opportunities in the ASEAN space market">มองหาโอกาสในตลาดอวกาศอาเซียน</li>
+        </ul>
+        <span class="go" data-th="คุยเรื่องความร่วมมือ →" data-en="Discuss a partnership →">คุยเรื่องความร่วมมือ →</span>
+      </a>
+      <a class="path" href="#team">
+        <span class="mono" data-th="นักศึกษาและนักวิจัย" data-en="Students & researchers">นักศึกษาและนักวิจัย</span>
+        <h3 data-th="อยากทำงานด้านอวกาศจริงจัง" data-en="You want to work on space, seriously">อยากทำงานด้านอวกาศจริงจัง</h3>
+        <ul>
+          <li data-th="เข้าร่วมโครงการวิจัย เช่น HAPS และ ADCS" data-en="Join projects such as HAPS and ADCS">เข้าร่วมโครงการวิจัย เช่น HAPS และ ADCS</li>
+          <li data-th="ชมรมเทคโนโลยีอวกาศและดาราศาสตร์ (STA)" data-en="The Space Technology and Astronomy Club (STA)">ชมรมเทคโนโลยีอวกาศและดาราศาสตร์ (STA)</li>
+          <li data-th="หัวข้อวิทยานิพนธ์ด้านดาวเทียมและโทรคมนาคม" data-en="Thesis topics in satellites and telecoms">หัวข้อวิทยานิพนธ์ด้านดาวเทียมและโทรคมนาคม</li>
+        </ul>
+        <span class="go" data-th="ดูทีมและชมรม →" data-en="Meet the team and club →">ดูทีมและชมรม →</span>
       </a>
     </div>
   </div>
 </section>
 
-<!-- CONTACT -->
-<section id="contact">
-  <div class="contact-box reveal">
-    <div class="sec-tag">Get in Touch</div>
-    <h2 style="font-family:'Sarabun';font-size:clamp(1.8rem,4vw,2.6rem);margin:14px 0 10px"><span class="th-txt">ติดต่อและร่วมมือ</span><span class="en">Contact & Collaborate</span></h2>
-    <p style="color:var(--muted)"><span class="th-txt">สนใจร่วมงานวิจัย ลงทุน ปรึกษา หรือเข้าร่วมกิจกรรม ติดต่อเราได้เลย</span><span class="en">Interested in research, investment, consulting, or events? Reach out.</span></p>
-    <div class="contact-methods">
-      <div class="cm"><div class="ic">📍</div><div class="lbl">Address</div><div class="val"><span class="th-txt">126 ถ.ประชาอุทิศ บางมด ทุ่งครุ กรุงเทพฯ 10140</span><span class="en">126 Pracha Uthit Rd, Bang Mod, Thung Khru, Bangkok 10140</span></div></div>
-      <div class="cm"><div class="ic">📞</div><div class="lbl">Phone</div><div class="val">(66) 2 561-5961</div></div>
-      <div class="cm"><div class="ic">✉️</div><div class="lbl">Email</div><div class="val">chirasil.cha@kmutt.ac.th</div></div>
-      <div class="cm"><div class="ic">🌐</div><div class="lbl">Social</div><div class="val">@thonburi.spacehub</div></div>
-      <div class="cm"><div class="ic">🕘</div><div class="lbl">Hours</div><div class="val"><span class="th-txt">จันทร์–ศุกร์ 9:00–17:00 น.</span><span class="en">Mon–Fri 9:00–17:00</span></div></div>
+<!-- TEAM -->
+<section class="team-band gut" id="team">
+  <div class="inner">
+    <span class="mono" style="color:var(--paper-dim)" data-th="ทีม" data-en="Team">ทีม</span>
+    <h2 style="font-size:clamp(1.8rem,3.4vw,2.6rem);margin-top:10px" data-th="ผู้เชี่ยวชาญและนักวิจัยหลัก" data-en="Lead specialists and researchers">ผู้เชี่ยวชาญและนักวิจัยหลัก</h2>
+    <div class="team">
+      <div class="person"><div class="ph"><img src="images/chirasil.jpg" alt="ผศ.ดร.จิรศิลป์ จยาวรรณ" loading="lazy"></div><h3 data-th="ผศ.ดร.จิรศิลป์ จยาวรรณ" data-en="Asst. Prof. Dr. Chirasil Chayawan">ผศ.ดร.จิรศิลป์ จยาวรรณ</h3><p data-th="หัวหน้าทีม · ผู้อำนวยการศูนย์ CISS" data-en="Team lead · Director, CISS">หัวหน้าทีม · ผู้อำนวยการศูนย์ CISS</p></div>
+      <div class="person"><div class="ph"><img src="images/Jakkapob.jpg" alt="ผศ.ดร.จักรภพ วงศ์วิวัฒน์" loading="lazy"></div><h3 data-th="ผศ.ดร.จักรภพ วงศ์วิวัฒน์" data-en="Asst. Prof. Dr. Jakrapop Wongwiwat">ผศ.ดร.จักรภพ วงศ์วิวัฒน์</h3><p data-th="หัวหน้า Astronergy Lab" data-en="Head, Astronergy Lab">หัวหน้า Astronergy Lab</p></div>
+      <div class="person"><div class="ph"><img src="images/Watunyou.jpg" alt="ดร.วทัญญู สุขเสงี่ยม" loading="lazy"></div><h3 data-th="ดร.วทัญญู สุขเสงี่ยม" data-en="Dr. Watanyoo Suksa-ngiam">ดร.วทัญญู สุขเสงี่ยม</h3><p data-th="ผู้เชี่ยวชาญนโยบายอวกาศ" data-en="Space policy">ผู้เชี่ยวชาญนโยบายอวกาศ</p></div>
+      <div class="person"><div class="ph"><img src="images/Jirawit.jpg" alt="ดร.จิรวิทย์ ปราถน์วิทยา" loading="lazy"></div><h3 data-th="ดร.จิรวิทย์ ปราถน์วิทยา" data-en="Dr. Jiravit Pratvittaya">ดร.จิรวิทย์ ปราถน์วิทยา</h3><p data-th="ผู้เชี่ยวชาญระบบ ADCS" data-en="Attitude control (ADCS)">ผู้เชี่ยวชาญระบบ ADCS</p></div>
     </div>
   </div>
 </section>
 
-<footer>
-  <div class="fbrand">
-    <svg class="logo-mark" style="width:34px;height:34px"><use href="#atom"/></svg>
-    <div class="brand-text"><span class="t-th">อวกาศบางมด</span><span class="t-en">THONBURI SPACE INNOVATION HUB</span></div>
+<!-- NETWORK -->
+<section class="network gut" aria-label="Network">
+  <div class="inner">
+    <span class="mono label" data-th="ทำงานร่วมกับ" data-en="Working with">ทำงานร่วมกับ</span>
+    <span class="org" data-th="มจธ." data-en="KMUTT">มจธ.</span>
+    <span class="org">CISS</span>
+    <span class="org" data-th="บพข." data-en="PMUC">บพข.</span>
+    <span class="org">ALT Telecom</span>
+    <a class="org" href="https://sta-website.vercel.app" target="_blank" rel="noopener"><img src="images/sta.png" alt="STA Club"><span class="org">STA Club ↗</span></a>
   </div>
-  <div class="copy">© 2025–2026 <span class="th-txt">อวกาศบางมด · Thonburi Space Innovation Hub · KMUTT</span><span class="en">Thonburi Space Innovation Hub · KMUTT</span></div>
-  <div class="attr">ภาพอวกาศบางส่วนจาก <a href="https://unsplash.com" target="_blank" rel="noopener">Unsplash</a> (ใช้งานได้ฟรี) · Space imagery courtesy of Unsplash</div>
+</section>
+
+<!-- CONTACT -->
+<section class="contact gut" id="contact">
+  <div class="inner grid">
+    <div>
+      <span class="mono" data-th="ติดต่อ" data-en="Contact">ติดต่อ</span>
+      <h2 data-th="เล่าโจทย์ของคุณให้เราฟัง" data-en="Tell us what you are working on">เล่าโจทย์ของคุณให้เราฟัง</h2>
+      <p class="intro" data-th="ส่งอีเมลสั้นๆ ว่าคุณเป็นใครและกำลังมองหาอะไร ทีมจะติดต่อกลับในวันทำการ" data-en="Send a short email saying who you are and what you need. The team replies on working days.">ส่งอีเมลสั้นๆ ว่าคุณเป็นใครและกำลังมองหาอะไร ทีมจะติดต่อกลับในวันทำการ</p>
+    </div>
+    <dl>
+      <dt>Email</dt><dd><span id="mail">chirasil.cha@kmutt.ac.th</span><button class="copy" type="button" data-copy="mail">COPY</button></dd>
+      <dt data-th="โทรศัพท์" data-en="Phone">โทรศัพท์</dt><dd><span id="tel">(66) 2 561-5961</span><button class="copy" type="button" data-copy="tel">COPY</button></dd>
+      <dt data-th="ที่อยู่" data-en="Address">ที่อยู่</dt><dd data-th="มหาวิทยาลัยเทคโนโลยีพระจอมเกล้าธนบุรี<br>126 ถ.ประชาอุทิศ บางมด ทุ่งครุ กรุงเทพฯ 10140" data-en="King Mongkut's University of Technology Thonburi<br>126 Pracha Uthit Rd, Bang Mod, Thung Khru, Bangkok 10140">มหาวิทยาลัยเทคโนโลยีพระจอมเกล้าธนบุรี<br>126 ถ.ประชาอุทิศ บางมด ทุ่งครุ กรุงเทพฯ 10140</dd>
+      <dt data-th="เวลาทำการ" data-en="Hours">เวลาทำการ</dt><dd data-th="จันทร์–ศุกร์ 9:00–17:00 น." data-en="Mon–Fri, 9:00–17:00">จันทร์–ศุกร์ 9:00–17:00 น.</dd>
+      <dt>Social</dt><dd>@thonburi.spacehub</dd>
+    </dl>
+  </div>
+</section>
+</main>
+
+<footer class="gut">
+  <div class="inner">
+    <div>
+      <a class="brand" href="#top"><svg aria-hidden="true"><use href="#mark"/></svg><span><b data-th="อวกาศบางมด" data-en="Thonburi Space">อวกาศบางมด</b><small>THONBURI SPACE ECONOMY AND ENGINEERING INNOVATION CENTER</small></span></a>
+      <small>© 2025–2026 Thonburi Space Economy and Engineering Innovation Center · CISS · KMUTT<br><span data-th="ภาพอวกาศทั้งหมดเป็นภาพสาธารณสมบัติของ NASA ใช้เพื่อประกอบเนื้อหา ไม่ใช่สถานที่หรืออุปกรณ์ของศูนย์" data-en="All space imagery is public-domain NASA imagery, used for illustration. It does not show our own facilities.">ภาพอวกาศทั้งหมดเป็นภาพสาธารณสมบัติของ NASA ใช้เพื่อประกอบเนื้อหา ไม่ใช่สถานที่หรืออุปกรณ์ของศูนย์</span></small>
+    </div>
+    <nav class="missions" aria-label="CISS missions">
+      <a href="https://chirasil.github.io/CISS/" target="_blank" rel="noopener">CISS Hub</a>
+      <a href="#top" aria-current="page" data-th="01 อวกาศ" data-en="01 Space">01 อวกาศ</a>
+      <a href="https://chirasil.github.io/CISS/ciss" target="_blank" rel="noopener" data-th="02 คุณวุฒิวิชาชีพ" data-en="02 Professional Qualification">02 คุณวุฒิวิชาชีพ</a>
+      <a href="https://chirasil.github.io/CISS/digital" target="_blank" rel="noopener" data-th="03 ดิจิทัลและการสื่อสาร" data-en="03 Digital & Communications">03 ดิจิทัลและการสื่อสาร</a>
+    </nav>
+  </div>
 </footer>
-</div>
 
 <script>
-/* ========================================================================
-   ใส่รูปทีมงาน: วางไฟล์ในโฟลเดอร์ images/ แล้วใส่ชื่อไฟล์ด้านล่าง
-   ======================================================================== */
-const TEAM_PHOTOS = {
-  "ph-1": "images/chirasil.jpg",   // ผศ.ดร.จิรศิลป์ จยาวรรณ
-  "ph-2": "images/Jakkapob.jpg",   // ผศ.ดร.จักรภพ วงศ์วิวัฒน์
-  "ph-3": "images/Watunyou.png",   // ดร.วทัญญู สุขเสงี่ยม
-  "ph-4": "images/Jirawit.jpg"     // ดร.จิรวิทย์ ปราถน์วิทยา
-};
 (function(){
-  for(const id in TEAM_PHOTOS){
-    const url=TEAM_PHOTOS[id];
-    if(!url) continue;
-    const el=document.getElementById(id);
-    if(el){el.innerHTML='<img src="'+url+'" alt="team member">';}
+  var KEY='ts-lang', lang='th';
+  try{ lang=localStorage.getItem(KEY)||'th'; }catch(e){}
+  var btn=document.getElementById('langBtn');
+  function apply(l){
+    lang=l;
+    document.querySelectorAll('[data-th]').forEach(function(el){ var v=el.getAttribute('data-'+l); if(v!=null) el.innerHTML=v; });
+    document.documentElement.lang=l;
+    btn.textContent=l==='th'?'EN':'ไทย';
+    try{ localStorage.setItem(KEY,l); }catch(e){}
   }
+  btn.addEventListener('click',function(){ apply(lang==='th'?'en':'th'); });
+  if(lang!=='th') apply(lang);
+
+  var links=document.getElementById('links'), burger=document.getElementById('burger');
+  burger.addEventListener('click',function(){ var o=links.classList.toggle('open'); burger.setAttribute('aria-expanded',o); });
+  links.addEventListener('click',function(e){ if(e.target.closest('a')){ links.classList.remove('open'); burger.setAttribute('aria-expanded','false'); } });
+
+  document.querySelectorAll('.copy').forEach(function(b){
+    b.addEventListener('click',function(){
+      var el=document.getElementById(b.dataset.copy), t=el.textContent;
+      function sel(){ var r=document.createRange(); r.selectNodeContents(el); var s=getSelection(); s.removeAllRanges(); s.addRange(r); }
+      if(navigator.clipboard&&navigator.clipboard.writeText){ navigator.clipboard.writeText(t).then(function(){ b.textContent='COPIED'; setTimeout(function(){b.textContent='COPY';},1600); },sel); } else sel();
+    });
+  });
+
+  /* static starfield behind the interstitial, drawn once */
+  var c=document.getElementById('stars');
+  function draw(){
+    var r=c.getBoundingClientRect(), d=window.devicePixelRatio||1;
+    c.width=r.width*d; c.height=r.height*d;
+    var x=c.getContext('2d'); x.scale(d,d);
+    var g=x.createLinearGradient(0,0,0,r.height); g.addColorStop(0,'#070b16'); g.addColorStop(1,'#0a1124');
+    x.fillStyle=g; x.fillRect(0,0,r.width,r.height);
+    var seed=7; function rnd(){ seed=(seed*16807)%2147483647; return seed/2147483647; }
+    for(var i=0;i<Math.round(r.width*r.height/2600);i++){
+      x.globalAlpha=.25+rnd()*.6; x.fillStyle=rnd()>.96?'#e0b25e':'#dfe6f2';
+      x.beginPath(); x.arc(rnd()*r.width,rnd()*r.height,rnd()*1.1+.2,0,7); x.fill();
+    }
+    x.globalAlpha=1;
+  }
+  draw(); var t; addEventListener('resize',function(){ clearTimeout(t); t=setTimeout(draw,150); });
 })();
-
-function toggleLang(){
-  const b=document.body;
-  if(b.classList.contains('lang-th')){
-    b.classList.remove('lang-th','th');b.classList.add('lang-en');
-    b.lang='en';document.getElementById('langbtn').textContent='ไทย';
-  }else{
-    b.classList.remove('lang-en');b.classList.add('lang-th','th');
-    b.lang='th';document.getElementById('langbtn').textContent='EN';
-  }
-}
-
-/* reveal on scroll */
-const io=new IntersectionObserver((es)=>{es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('show')})},{threshold:.12});
-document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
-
-/* count-up stats */
-function countUp(el){
-  const target=+el.dataset.count, suf=el.dataset.suffix||'';
-  let cur=0; const step=Math.max(1,target/55);
-  const t=setInterval(()=>{cur+=step;if(cur>=target){cur=target;clearInterval(t);}el.textContent=Math.floor(cur).toLocaleString()+suf;},22);
-}
-const cio=new IntersectionObserver((es)=>{es.forEach(e=>{if(e.isIntersecting){countUp(e.target);cio.unobserve(e.target);}})},{threshold:.6});
-document.querySelectorAll('.num[data-count]').forEach(el=>cio.observe(el));
-
-/* nav shrink + scroll progress */
-window.addEventListener('scroll',()=>{
-  const sc=window.scrollY;
-  document.getElementById('nav').style.padding=sc>40?'10px 6vw':'16px 6vw';
-  const h=document.documentElement.scrollHeight-innerHeight;
-  document.getElementById('progress').style.width=(sc/h*100)+'%';
-});
-
-/* hero parallax (subtle) */
-const heroBg=document.querySelector('.hero-bg'),planet=document.querySelector('.planet-scene');
-window.addEventListener('scroll',()=>{
-  const y=window.scrollY;
-  if(y<window.innerHeight){
-    if(planet)planet.style.transform='translateY(calc(-50% + '+(y*0.12)+'px))';
-  }
-});
-
-/* starfield */
-const c=document.getElementById('stars'),x=c.getContext('2d');
-let stars=[],W,H;
-function rs(){W=c.width=innerWidth;H=c.height=innerHeight;stars=[];
-  for(let i=0;i<170;i++)stars.push({x:Math.random()*W,y:Math.random()*H,z:Math.random()*1.5+.3,s:Math.random()*.4+.05});}
-rs();addEventListener('resize',rs);
-function draw(){x.clearRect(0,0,W,H);
-  for(const st of stars){
-    st.y+=st.s;if(st.y>H){st.y=0;st.x=Math.random()*W;}
-    x.beginPath();x.globalAlpha=st.z*.6+.2;
-    x.fillStyle=Math.random()>.97?'#cfa769':'#dfe6f2';
-    x.arc(st.x,st.y,st.z,0,7);x.fill();
-  }
-  x.globalAlpha=1;requestAnimationFrame(draw);
-}
-draw();
 </script>
+
 </body>
 </html>
