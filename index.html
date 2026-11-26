@@ -78,6 +78,11 @@ p{margin:0}
 .hero p.lede{margin-top:22px;font-size:1.12rem;color:#dbe3f2;max-width:34em}
 .hero .textlink{display:inline-flex;gap:8px;margin-top:28px;font-family:var(--f-display);font-weight:500;text-decoration:none;color:var(--ink);border-bottom:1px solid var(--signal);padding-bottom:3px}
 .hero .textlink:hover{color:var(--signal)}
+.hero .herolinks{display:flex;flex-wrap:wrap;align-items:center;gap:14px 30px;margin-top:28px}
+.hero .herolinks .textlink{margin-top:0}
+.hero .textlink.sub{align-items:center;color:#c9d3e6;border-bottom-color:rgba(238,242,250,.3)}
+.hero .textlink.sub i{width:7px;height:7px;border-radius:50%;background:#5fd08a;box-shadow:0 0 0 4px rgba(95,208,138,.18)}
+.hero .textlink.sub:hover{color:var(--signal);border-bottom-color:var(--signal)}
 .chev{position:absolute;right:max(24px,6vw);bottom:48px;display:grid;gap:2px;opacity:.7}
 .chev span{width:34px;height:14px;border-right:1.5px solid var(--ink);border-bottom:1.5px solid var(--ink);transform:rotate(45deg) scale(.7);transform-origin:center}
 .credit{position:absolute;right:max(16px,env(safe-area-inset-right,0px));bottom:14px;font-family:var(--f-mono);font-size:.64rem;letter-spacing:.04em;color:rgba(238,242,250,.6);max-width:60%;text-align:right;line-height:1.4}
@@ -282,7 +287,10 @@ footer small{display:block;color:var(--dim);font-size:.76rem;margin-top:8px;line
       <div class="kicker mono"><i></i><span data-th="ภารกิจที่ 01 ของ CISS · มจธ." data-en="CISS Mission 01 · KMUTT">ภารกิจที่ 01 ของ CISS · มจธ.</span></div>
       <h1 data-th="<span class='ln'>อวกาศที่ใช้งานได้จริง</span><span class='ln'>สำหรับ<em>ธุรกิจไทย</em></span>" data-en="<span class='ln'>Space that works</span><span class='ln'>for <em>Thai business</em></span>"><span class="ln">อวกาศที่ใช้งานได้จริง</span><span class="ln">สำหรับ<em>ธุรกิจไทย</em></span></h1>
       <p class="lede" data-th="อวกาศบางมดเชื่อมงานวิจัยของ มจธ. เข้ากับผู้ประกอบการ ตั้งแต่การสื่อสารผ่านดาวเทียม สถานีสื่อสารบนชั้นบรรยากาศสูง ไปจนถึงดาวเทียมขนาดเล็ก ล่าสุดเราได้รับทุน บพข. พัฒนา HAPS ต้นแบบสัญชาติไทย" data-en="Thonburi Space links KMUTT research with Thai companies, from satellite communications and high-altitude platforms to small satellites. Our latest project: a Thai-built HAPS prototype funded by PMUC.">อวกาศบางมดเชื่อมงานวิจัยของ มจธ. เข้ากับผู้ประกอบการ ตั้งแต่การสื่อสารผ่านดาวเทียม สถานีสื่อสารบนชั้นบรรยากาศสูง ไปจนถึงดาวเทียมขนาดเล็ก ล่าสุดเราได้รับทุน บพข. พัฒนา HAPS ต้นแบบสัญชาติไทย</p>
-      <a class="textlink" href="#ascent" data-th="ดูว่าเราทำอะไร ↓" data-en="See what we do ↓">ดูว่าเราทำอะไร ↓</a>
+      <div class="herolinks">
+        <a class="textlink" href="#ascent" data-th="ดูว่าเราทำอะไร ↓" data-en="See what we do ↓">ดูว่าเราทำอะไร ↓</a>
+        <a class="textlink sub" href="#cockpits"><i aria-hidden="true"></i><span data-th="ดูดาวเทียมเหนือบางมดสด →" data-en="See satellites over Bang Mod live →">ดูดาวเทียมเหนือบางมดสด →</span></a>
+      </div>
     </div>
   </div>
   <div class="chev" aria-hidden="true"><span></span><span></span><span></span></div>
