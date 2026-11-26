@@ -159,6 +159,7 @@ footer a{color:var(--dim)}
       <a class="hide-s" href="index.html" data-th="หน้าหลัก" data-en="Home">หน้าหลัก</a>
       <a class="hide-s" href="haps.html">HAPS</a>
       <a href="eo-cockpit.html" aria-current="page">EO Cockpit</a>
+      <a href="comm-cockpit.html">Comm Cockpit</a>
       <button class="chip-btn" id="langBtn" type="button" aria-label="Switch language">EN</button>
     </nav>
   </div>
@@ -319,7 +320,7 @@ function mkSat(c,o){
   var a0=a1*(1-d1/3-d1*d1-134/81*d1*d1*d1);
   var d0=1.5*k2*(3*ci*ci-1)/(a0*a0*b);
   var n0=n/(1+d0), a=a0/(1-d0), p=a*(1-e*e), q=J2*(RE/p)*(RE/p)*n0;
-  return {c:c,epoch:Date.parse(o[1]+'Z'),n:n,e:e,i:i,a:a,
+  return {c:c,epoch:Date.parse(String(o[1]).slice(0,23)+'Z'),n:n,e:e,i:i,a:a,
     O0:o[5]*D2R,w0:o[6]*D2R,M0:o[7]*D2R,nd:o[8]||0,
     Od:-1.5*q*ci, wd:0.75*q*(5*ci*ci-1), period:TAU/n/60};
 }

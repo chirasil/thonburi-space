@@ -148,6 +148,20 @@ p{margin:0}
 .s-gulf::before{background:linear-gradient(var(--void),transparent 20%,rgba(7,11,22,.35) 60%,var(--void)),linear-gradient(270deg,rgba(7,11,22,.75),transparent 60%)}
 
 /* PATHS (light) */
+.btns{display:flex;flex-wrap:wrap;gap:12px;justify-self:start}
+.cockpits{padding-block:40px 96px}
+.cockpits .mono{color:var(--signal)}
+.cockpits h2{font-size:clamp(1.8rem,3.4vw,2.6rem);margin-top:10px}
+.cockpits .intro{color:var(--dim);max-width:40em;margin-top:12px}
+.cocks{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px;margin-top:36px}
+.cock{display:flex;flex-direction:column;min-width:0;text-decoration:none;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:var(--navy);transition:border-color .2s,transform .2s}
+.cock:hover{border-color:var(--signal);transform:translateY(-3px)}
+.cock img{display:block;width:100%;height:auto;aspect-ratio:1280/595;object-fit:cover;border-bottom:1px solid var(--line)}
+.cock .body{display:flex;flex-direction:column;gap:10px;padding:24px 26px 26px;flex:1}
+.cock h3{font-size:1.35rem}
+.cock p{color:var(--dim);font-size:.97rem;line-height:1.65}
+.cock .go{margin-top:auto;padding-top:8px;font-family:var(--f-display);font-weight:600;color:var(--signal)}
+.cockpits .shotnote{margin-top:16px;font-size:.78rem;color:var(--dim)}
 .light{background:var(--paper);color:var(--paper-ink);padding-block:88px}
 .light .mono{color:var(--paper-dim)}
 .light .intro{color:var(--paper-dim);max-width:40em;margin-top:10px}
@@ -204,6 +218,7 @@ footer small{display:block;color:var(--dim);font-size:.76rem;margin-top:8px;line
   .burger{display:block}
   .news{grid-template-columns:1fr}
   .paths{grid-template-columns:1fr}
+  .cocks{grid-template-columns:1fr}
   .team{grid-template-columns:repeat(2,minmax(0,1fr))}
   .contact .grid{grid-template-columns:1fr;gap:32px}
   .s-haps .split{grid-template-columns:1fr;min-height:0}
@@ -223,7 +238,7 @@ footer small{display:block;color:var(--dim);font-size:.76rem;margin-top:8px;line
   .contact dd{margin-bottom:12px}
   .credit{max-width:90%}
 }
-@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}.btn,.path{transition:none}}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}.btn,.path,.cock{transition:none}}
 </style>
 </head>
 <body>
@@ -246,7 +261,7 @@ footer small{display:block;color:var(--dim);font-size:.76rem;margin-top:8px;line
     <nav class="links" id="links" aria-label="Main">
       <a href="#ascent" data-th="ภารกิจ" data-en="Missions">ภารกิจ</a>
       <a href="haps.html">HAPS</a>
-      <a href="eo-cockpit.html">EO Cockpit</a>
+      <a href="#cockpits">Cockpit</a>
       <a href="#latest" data-th="ข่าว" data-en="News">ข่าว</a>
       <a href="#paths" data-th="ร่วมงานกับเรา" data-en="Work with us">ร่วมงานกับเรา</a>
       <a href="#team" data-th="ทีม" data-en="Team">ทีม</a>
@@ -326,7 +341,10 @@ footer small{display:block;color:var(--dim);font-size:.76rem;margin-top:8px;line
       <h2 data-th="สื่อสารดาวเทียม<br>และคลื่นความถี่" data-en="Satellite links<br>and spectrum">สื่อสารดาวเทียม<br>และคลื่นความถี่</h2>
       <p data-th="ดาวเทียมจะมีประโยชน์ก็ต่อเมื่อสื่อสารกับพื้นดินได้ ทีมจากภาควิชาวิศวกรรมอิเล็กทรอนิกส์และโทรคมนาคม มจธ. วิจัยการสื่อสารผ่านดาวเทียม การใช้คลื่นความถี่ร่วมกันระหว่างดาวเทียมกับ 5G และโครงข่าย 6G แบบอวกาศ–อากาศ–ภาคพื้นดิน" data-en="A satellite is only useful if it can talk to the ground. Our team in KMUTT's Electronic and Telecommunication Engineering department researches satellite links, spectrum sharing between satellites and 5G, and 6G space–air–ground networks.">ดาวเทียมจะมีประโยชน์ก็ต่อเมื่อสื่อสารกับพื้นดินได้ ทีมจากภาควิชาวิศวกรรมอิเล็กทรอนิกส์และโทรคมนาคม มจธ. วิจัยการสื่อสารผ่านดาวเทียม การใช้คลื่นความถี่ร่วมกันระหว่างดาวเทียมกับ 5G และโครงข่าย 6G แบบอวกาศ–อากาศ–ภาคพื้นดิน</p>
       <div class="proof"><span>KMUTT BANG MOD</span><span><b>13.65°N</b> · <b>100.49°E</b></span></div>
-      <a class="btn ghost" href="https://chirasil.github.io/CISS/digital" target="_blank" rel="noopener" data-th="ดูงานด้านการสื่อสาร ↗" data-en="See our communications work ↗">ดูงานด้านการสื่อสาร ↗</a>
+      <div class="btns">
+        <a href="comm-cockpit.html" class="btn" data-th="ดูดาวเทียมสื่อสารสด →" data-en="Track comms satellites live →">ดูดาวเทียมสื่อสารสด →</a>
+        <a class="btn ghost" href="https://chirasil.github.io/CISS/digital" target="_blank" rel="noopener" data-th="ดูงานด้านการสื่อสาร ↗" data-en="See our communications work ↗">ดูงานด้านการสื่อสาร ↗</a>
+      </div>
     </div>
   </div>
   <p class="credit" data-th="ภาพประกอบ: จานสายอากาศ DSS-15 ขนาด 34 ม. ที่ Goldstone สหรัฐฯ · NASA/JPL-Caltech (PIA26717)" data-en="Illustration: 34 m DSS-15 antenna at Goldstone, USA · NASA/JPL-Caltech (PIA26717)">ภาพประกอบ: จานสายอากาศ DSS-15 ขนาด 34 ม. ที่ Goldstone สหรัฐฯ · NASA/JPL-Caltech (PIA26717)</p>
@@ -369,6 +387,36 @@ footer small{display:block;color:var(--dim);font-size:.76rem;margin-top:8px;line
   <p class="credit" data-th="ภาพประกอบ: CubeSat สามดวงที่นักศึกษาทั่วโลกออกแบบ ถูกปล่อยจากสถานีอวกาศนานาชาติ 3 ก.พ. 2569 · NASA (iss074e0301636)" data-en="Illustration: three student-built CubeSats deployed from the ISS, 3 Feb 2026 · NASA (iss074e0301636)">ภาพประกอบ: CubeSat สามดวงที่นักศึกษาทั่วโลกออกแบบ ถูกปล่อยจากสถานีอวกาศนานาชาติ 3 ก.พ. 2569 · NASA (iss074e0301636)</p>
 </section>
 
+<!-- LIVE COCKPITS -->
+<section class="cockpits gut" id="cockpits">
+  <div class="inner">
+    <span class="mono" data-th="ห้องควบคุมสด" data-en="Live cockpits">ห้องควบคุมสด</span>
+    <h2 data-th="ดูดาวเทียมเหนือบางมด ณ ขณะนี้" data-en="See the satellites over Bang Mod right now">ดูดาวเทียมเหนือบางมด ณ ขณะนี้</h2>
+    <p class="intro" data-th="เครื่องมือสองหน้าที่คำนวณตำแหน่งดาวเทียมจากข้อมูลวงโคจรของ CelesTrak แบบเรียลไทม์ เปิดใช้ได้ทันทีในเบราว์เซอร์" data-en="Two tools that compute satellite positions in real time from CelesTrak orbital data. They run straight in your browser.">เครื่องมือสองหน้าที่คำนวณตำแหน่งดาวเทียมจากข้อมูลวงโคจรของ CelesTrak แบบเรียลไทม์ เปิดใช้ได้ทันทีในเบราว์เซอร์</p>
+    <div class="cocks">
+      <a class="cock" href="comm-cockpit.html">
+        <img src="images/cockpit-comm.jpg" alt="" loading="lazy" width="1280" height="595">
+        <div class="body">
+          <span class="mono">Comm Cockpit · LEO · MEO · GEO</span>
+          <h3 data-th="ดาวเทียมสื่อสาร" data-en="Communication satellites">ดาวเทียมสื่อสาร</h3>
+          <p data-th="ติดตามดาวเทียมสื่อสารแบบเรียลไทม์ ทั้งกลุ่มดาวเทียม LEO/MEO และดาวเทียมค้างฟ้า พร้อมมุมเงยและมุมทิศจาก มจธ. บางมด" data-en="Track communication satellites in real time, from LEO/MEO constellations to geostationary satellites, with elevation and azimuth from KMUTT Bang Mod.">ติดตามดาวเทียมสื่อสารแบบเรียลไทม์ ทั้งกลุ่มดาวเทียม LEO/MEO และดาวเทียมค้างฟ้า พร้อมมุมเงยและมุมทิศจาก มจธ. บางมด</p>
+          <span class="go" data-th="เปิด Comm Cockpit →" data-en="Open Comm Cockpit →">เปิด Comm Cockpit →</span>
+        </div>
+      </a>
+      <a class="cock" href="eo-cockpit.html">
+        <img src="images/cockpit-eo.jpg" alt="" loading="lazy" width="1280" height="595">
+        <div class="body">
+          <span class="mono">EO Cockpit · LEO</span>
+          <h3 data-th="ดาวเทียมสำรวจโลก" data-en="Earth-observation satellites">ดาวเทียมสำรวจโลก</h3>
+          <p data-th="ติดตามตำแหน่งดาวเทียมสำรวจโลกวงโคจรต่ำที่เปิดข้อมูลและภาพถ่ายให้ใช้ฟรีแบบเรียลไทม์ พร้อมภาพถ่ายล่าสุดเหนือประเทศไทย" data-en="Track low-Earth-orbit observation satellites whose data and imagery are free to use, in real time, with the latest imagery over Thailand.">ติดตามตำแหน่งดาวเทียมสำรวจโลกวงโคจรต่ำที่เปิดข้อมูลและภาพถ่ายให้ใช้ฟรีแบบเรียลไทม์ พร้อมภาพถ่ายล่าสุดเหนือประเทศไทย</p>
+          <span class="go" data-th="เปิด EO Cockpit →" data-en="Open EO Cockpit →">เปิด EO Cockpit →</span>
+        </div>
+      </a>
+    </div>
+    <p class="shotnote" data-th="ภาพหน้าจอเมื่อ 26 พ.ย. 2569 · ตัวเลขในหน้าจริงเปลี่ยนตามเวลา" data-en="Screenshots taken 26 Nov 2026 · figures on the live pages change over time">ภาพหน้าจอเมื่อ 26 พ.ย. 2569 · ตัวเลขในหน้าจริงเปลี่ยนตามเวลา</p>
+  </div>
+</section>
+
 <!-- SCENE 4: BACK TO EARTH -->
 <section class="scene right s-gulf gut" id="value">
   <img class="bg" src="images/ts-gulf.jpg" alt="" loading="lazy">
@@ -378,7 +426,10 @@ footer small{display:block;color:var(--dim);font-size:.76rem;margin-top:8px;line
       <h2 data-th="ประโยชน์ที่กลับลงมา<br>ถึงธุรกิจไทย" data-en="Value that comes back<br>down to Thai business">ประโยชน์ที่กลับลงมา<br>ถึงธุรกิจไทย</h2>
       <p data-th="ข้อมูลและบริการจากอวกาศมีค่าเมื่อธุรกิจนำไปใช้ได้จริง เราให้คำปรึกษาเชิงกลยุทธ์ อบรมทีมงาน และจัดทำข้อเสนอเชิงนโยบาย เพื่อให้ผู้ประกอบการไทยเข้าสู่อุตสาหกรรมอวกาศได้อย่างมีระบบ" data-en="Space data and services only matter when businesses can use them. We provide strategic advice, team training and policy work so Thai companies can enter the space industry with a plan.">ข้อมูลและบริการจากอวกาศมีค่าเมื่อธุรกิจนำไปใช้ได้จริง เราให้คำปรึกษาเชิงกลยุทธ์ อบรมทีมงาน และจัดทำข้อเสนอเชิงนโยบาย เพื่อให้ผู้ประกอบการไทยเข้าสู่อุตสาหกรรมอวกาศได้อย่างมีระบบ</p>
       <div class="proof"><span data-th="<b>ที่ปรึกษา</b>" data-en="<b>Consulting</b>">ที่ปรึกษา</span><span data-th="<b>อบรม</b>" data-en="<b>Training</b>">อบรม</span><span data-th="<b>นโยบายอวกาศ</b>" data-en="<b>Space policy</b>">นโยบายอวกาศ</span></div>
-      <a class="btn" href="#paths" data-th="เริ่มจากโจทย์ของคุณ" data-en="Start with your problem">เริ่มจากโจทย์ของคุณ</a>
+      <div class="btns">
+        <a class="btn" href="#paths" data-th="เริ่มจากโจทย์ของคุณ" data-en="Start with your problem">เริ่มจากโจทย์ของคุณ</a>
+        <a href="eo-cockpit.html" class="btn ghost" data-th="ดูดาวเทียมสำรวจโลกสด →" data-en="Track Earth-observation satellites live →">ดูดาวเทียมสำรวจโลกสด →</a>
+      </div>
     </div>
   </div>
   <p class="credit" data-th="ภาพ: แสงไฟเรือประมงในอ่าวไทย จากสถานีอวกาศนานาชาติ 21 เม.ย. 2569 · NASA (iss074e0536946)" data-en="Photo: fishing-boat lights in the Gulf of Thailand from the ISS, 21 Apr 2026 · NASA (iss074e0536946)">ภาพ: แสงไฟเรือประมงในอ่าวไทย จากสถานีอวกาศนานาชาติ 21 เม.ย. 2569 · NASA (iss074e0536946)</p>
