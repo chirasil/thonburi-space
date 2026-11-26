@@ -1,4 +1,5 @@
-# Mirrors CelesTrak orbital elements for comm-cockpit.html into the gp-data branch.
+# Mirrors CelesTrak orbital elements for comm-cockpit.html and eo-cockpit.html
+# (groups resource and weather) into the gp-data branch.
 # The page reads this copy first, so visitors do not hit CelesTrak's per-address limit.
 # gp-data is rewritten as a single commit each run, so the repository does not grow.
 name: Update orbital data mirror
@@ -28,7 +29,7 @@ jobs:
         run: |
           python3 - <<'PY'
           import csv, io, json, os, time, urllib.request, datetime
-          GROUPS = ['geo','ses','iridium-NEXT','globalstar','orbcomm','oneweb','kuiper','qianfan','hulianwang','starlink']
+          GROUPS = ['resource','weather','geo','ses','iridium-NEXT','globalstar','orbcomm','oneweb','kuiper','qianfan','hulianwang','starlink']
           KEEP = ['OBJECT_NAME','NORAD_CAT_ID','EPOCH','MEAN_MOTION','ECCENTRICITY','INCLINATION','RA_OF_ASC_NODE','ARG_OF_PERICENTER','MEAN_ANOMALY','MEAN_MOTION_DOT']
           try:
               meta = json.load(open('out/meta.json'))
