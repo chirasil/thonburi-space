@@ -135,7 +135,9 @@ footer a{color:var(--dim)}
   .strip{grid-template-columns:1fr 1fr}
   .strip div{border-bottom:1px solid var(--line)}
   .strip div:last-child{grid-column:1/-1}
-  .links a.hide-s{display:none}
+  .links a.hide-s,.nav .lg{display:none}
+  .links{gap:16px}
+  .links a,.brand b,.brand small{white-space:nowrap}
   .shotbox{height:340px}
 }
 </style>
@@ -154,12 +156,12 @@ footer a{color:var(--dim)}
 
 <header class="nav gut">
   <div class="inner">
-    <a class="brand" href="index.html"><svg aria-hidden="true"><use href="#mark"/></svg><span><b data-th="อวกาศบางมด" data-en="Thonburi Space">อวกาศบางมด</b><small>EO COCKPIT · LEO</small></span></a>
+    <a class="brand" href="index.html"><svg aria-hidden="true"><use href="#mark"/></svg><span><b data-th="อวกาศบางมด" data-en="Thonburi Space">อวกาศบางมด</b><small>EO COCKPIT<span class="lg"> · LEO</span></small></span></a>
     <nav class="links" aria-label="Main">
       <a class="hide-s" href="index.html" data-th="หน้าหลัก" data-en="Home">หน้าหลัก</a>
       <a class="hide-s" href="haps.html">HAPS</a>
-      <a href="eo-cockpit.html" aria-current="page">EO Cockpit</a>
-      <a href="comm-cockpit.html">Comm Cockpit</a>
+      <a href="eo-cockpit.html" aria-current="page" aria-label="EO Cockpit">EO<span class="lg"> Cockpit</span></a>
+      <a href="comm-cockpit.html" aria-label="Comm Cockpit">Comm<span class="lg"> Cockpit</span></a>
       <button class="chip-btn" id="langBtn" type="button" aria-label="Switch language">EN</button>
     </nav>
   </div>
