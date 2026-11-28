@@ -109,6 +109,11 @@ p{margin:0}
 .news p{color:var(--paper-dim);font-size:.96rem;line-height:1.65}
 .news .lead p{color:var(--dim)}
 .news.plain{grid-template-columns:repeat(3,minmax(0,1fr))}
+/* a single update: one wide card, picture left and text right */
+.news article.lead:only-child{grid-column:1/-1;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);grid-auto-rows:min-content;column-gap:32px;row-gap:10px;align-content:center}
+.news article.lead:only-child>*{grid-column:2;justify-self:start}
+.news article.lead:only-child>.nvid{grid-column:1;grid-row:1/span 8;justify-self:stretch}
+.news article.lead:only-child:not(:has(.nvid)){display:flex}
 .sub-head{margin-top:52px;scroll-margin-top:88px}
 .tag{align-self:flex-start;font-family:var(--f-mono);font-size:.66rem;letter-spacing:.08em;text-transform:uppercase;padding:3px 8px;border-radius:999px;border:1px solid var(--paper-line);color:var(--paper-dim)}
 .lead .tag{border-color:var(--signal);color:var(--signal)}
@@ -241,6 +246,7 @@ footer small{display:block;color:var(--dim);font-size:.76rem;margin-top:8px;line
   .links.open{display:flex;position:absolute;top:100%;left:0;right:0;flex-direction:column;align-items:flex-start;gap:16px;background:var(--void);border-bottom:1px solid var(--line);padding:20px max(16px,env(safe-area-inset-right,0px)) 24px max(16px,env(safe-area-inset-left,0px))}
   .burger{display:block}
   .news,.news.plain{grid-template-columns:1fr}
+  .news article.lead:only-child{display:flex}
   .paths{grid-template-columns:1fr}
   .cocks{grid-template-columns:1fr}
   .team{grid-template-columns:repeat(2,minmax(0,1fr))}
