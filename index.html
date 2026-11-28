@@ -631,7 +631,7 @@ footer small{display:block;color:var(--dim);font-size:.76rem;margin-top:8px;line
     fetch('https://chirasil.github.io/CISS/data/news.json',{cache:'no-store'}).then(function(r){ if(!r.ok) throw 0; return r.json(); }).then(function(d){
       var mine=(d.news||d).filter(function(n){ return (n.missions||[]).indexOf('space')>=0; });
       var u=mine.filter(function(n){ return n.kind==='update'; }).slice(0,3);
-      var e=mine.filter(function(n){ return n.kind!=='update'; }).slice(0,3);
+      var e=mine.filter(function(n){ return n.kind!=='update'; }).slice(0,6);
       if(u.length) upd.innerHTML=u.map(function(n,i){ return card(n,i===0); }).join('');
       if(e.length) box.innerHTML=e.map(function(n){ return card(n,false); }).join('');
     }).catch(function(){});
